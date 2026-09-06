@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>resourcepack一覧 - マイクラ配布ラボ sei0608</title>
+  <title>リソースパック一覧</title>
   <link rel="stylesheet" href="assets/css/style.css">
   <script src="assets/js/common.js" defer></script>
   <script src="assets/js/resourcepacks.js" defer></script>
@@ -18,15 +18,26 @@
       <a href="tools.html">ツール</a>
     </nav>
   </header>
+
   <main>
-    <section>
-      <h2 class="section-title">検索</h2>
+    <section id="search-section">
       <input id="search-input" type="text" placeholder="名前・タグで検索">
+
+      <!-- MCバージョン検索 -->
+      <select id="mc-version-select">
+        <option value="">MCバージョン（すべて）</option>
+      </select>
     </section>
 
-    <section>
-      <h2 class="section-title">リソースパック一覧</h2>
+    <section id="list-section">
       <div id="resourcepack-list"></div>
+    </section>
+
+    <section id="detail-section" style="display:none;">
+      <h2 id="detail-title"></h2>
+      <div id="detail-tags" class="tag-list"></div>
+      <p id="detail-description"></p>
+      <ul id="detail-versions"></ul>
     </section>
   </main>
 </body>
