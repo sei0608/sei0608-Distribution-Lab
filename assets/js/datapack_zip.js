@@ -153,10 +153,8 @@ function createPackMcmeta(description, packFormat) {
       pack: {
         pack_format: packFormat,
         description: description,
-        supported_formats: {
-          min_inclusive: packFormat,
-          max_inclusive: packFormat
-        }
+          min_format: packFormat,
+          max_format: packFormat
       }
     };
   }
