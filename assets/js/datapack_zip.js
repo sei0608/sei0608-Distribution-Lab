@@ -89,22 +89,24 @@ function getPackFormat(mc) {
   return 18;
 }
 
-// function タグフォルダ自動判定
 function getFunctionTagFolder(mc) {
   const numeric = mc.match(/\d+\.\d+(\.\d+)?/);
   if (!numeric) return "functions";
 
   const [major, minor, patch = 0] = numeric[0].split(".").map(Number);
 
-  // 1.20.7 以降はすべて function
-  if (major === 1 && minor === 20 && patch >= 7) return "function";
+  // 1.20.7 以上は全部 "function"
+  if (
+    (major === 1 && minor === 20 && patch >= 7) ||      // 1.20.7〜
+    (major === 1 && minor > 20) ||                      // 1.21〜
+    (major > 1)                                         // 26.x など
+  ) {
+    return "function";
+  }
 
-  // 1.21 以降も function
-  if (major === 1 && minor >= 21) return "function";
-
-  // 26.x 系も function
-  if (major >= 26) return "function";
-
-  // それ以外は旧仕様
+  // それより前は "functions"
   return "functions";
 }
+
+
+
