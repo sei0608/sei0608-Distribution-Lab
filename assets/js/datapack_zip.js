@@ -20,8 +20,8 @@ document.addEventListener("DOMContentLoaded", () => {
     const zip = new JSZip();
 
     // pack.mcmeta（min/max 対応）
-    const packMcmeta = createPackMcmeta(description, packFormat);
-    zip.file(`${name}/pack.mcmeta`, JSON.stringify(packMcmeta, null, 2));
+const packMcmeta = createPackMcmeta(description, packFormat);
+zip.file(`${name}/pack.mcmeta`, JSON.stringify(packMcmeta, null, 2));
 
     // load.mcfunction / tick.mcfunction
     zip.file(`${name}/data/${id}/functions/load.mcfunction`, "");
@@ -147,19 +147,18 @@ function getFunctionTagFolder(mc) {
 // pack.mcmeta（min/max 対応）
 // ===============================
 function createPackMcmeta(description, packFormat) {
-  // 1.21 以降は supported_formats が必須
+  // 1.21 以降は min_format / max_format を使う
   if (packFormat >= 48) {
     return {
       pack: {
-        pack_format: packFormat,
         description: description,
-          min_format: packFormat,
-          max_format: packFormat
+        min_format: packFormat,
+        max_format: packFormat
       }
     };
   }
 
-  // 1.20 以前は従来形式
+  // 1.20 以前は従来の pack_format
   return {
     pack: {
       pack_format: packFormat,
@@ -167,4 +166,5 @@ function createPackMcmeta(description, packFormat) {
     }
   };
 }
+
 
