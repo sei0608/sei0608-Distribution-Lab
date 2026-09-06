@@ -27,14 +27,12 @@ document.addEventListener("DOMContentLoaded", () => {
     };
     zip.file(`${name}/pack.mcmeta`, JSON.stringify(packMcmeta, null, 2));
 
-    // load.mcfunction / tick.mcfunction（空）
+    // load.mcfunction / tick.mcfunction
     zip.file(`${name}/data/${id}/functions/load.mcfunction`, "");
     zip.file(`${name}/data/${id}/functions/tick.mcfunction`, "");
 
-    // MCバージョンによって function タグのフォルダ名を切り替え
-    const tagFolder = isNewFunctionTag(mcVersion)
-      ? "function"      // 1.20.7 以降
-      : "functions";    // 1.20.6 以前
+    // ここが重要：1.20.7 以降は function、それ以前は functions
+    const tagFolder = getFunctionTagFolder(mcVersion);
 
     const loadJson = {
       values: [`${id}:load`]
@@ -69,7 +67,7 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
-// MCバージョン → pack_format 自動変換
+// pack_format 自動判定
 function getPackFormat(mc) {
   if (mc.startsWith("1.20")) return 18;
   if (mc.startsWith("1.19")) return 15;
@@ -81,13 +79,18 @@ function getPackFormat(mc) {
   return 18;
 }
 
-// 1.20.7 以降なら function タグフォルダを切り替える
-function isNewFunctionTag(mc) {
-  // 1.20.7 以上かどうかを判定
+// ★ ここが完全修正ポイント ★
+function getFunctionTagFolder(mc) {
   const parts = mc.split(".");
   const major = Number(parts[0]);
   const minor = Number(parts[1]);
   const patch = Number(parts[2] || 0);
 
-  return (major === 1 && minor === 20 && patch >= 7);
+  // 1.20.7 以上 → function
+  if (major === 1 && minor === 20 && patch >= 7) {
+    return "function";
+  }
+
+  // それ以外 → functions
+  return "functions";
 }
