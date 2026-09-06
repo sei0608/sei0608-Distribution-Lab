@@ -1,7 +1,7 @@
 [
   {
     "id": "fireball-datapack-sample",
-    "name": "fireball sample",
+    "name": "火の玉を飛ばすときのデータパックサンプル",
     "author": "sei0608",
     "tags": ["sample", "fireball"],
     "description": "ニンジン棒を右クリックしたら、ファイヤーボールが向いてる方向にとばせるデータパックサンプル",
