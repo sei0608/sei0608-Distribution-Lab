@@ -19,13 +19,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const zip = new JSZip();
 
-    // pack.mcmeta
-    const packMcmeta = {
-      pack: {
-        pack_format: packFormat,
-        description: description
-      }
-    };
+    // pack.mcmeta（min/max 対応）
+    const packMcmeta = createPackMcmeta(description, packFormat);
     zip.file(`${name}/pack.mcmeta`, JSON.stringify(packMcmeta, null, 2));
 
     // load.mcfunction / tick.mcfunction
@@ -56,57 +51,61 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 });
 
+
+// ===============================
+// pack_format（正式版全対応）
+// ===============================
 function getPackFormat(mc) {
   const numeric = mc.match(/\d+\.\d+(\.\d+)?/);
-  if (!numeric) return 4; // 最低値
+  if (!numeric) return 4;
 
   const [major, minor, patch = 0] = numeric[0].split(".").map(Number);
 
   // 26.x 系
   if (major === 26) {
-    if (minor === 1) return 101.1;   // 26.1
-    if (minor === 2) return 107.1;   // 26.2
+    if (minor === 1) return 101.1;
+    if (minor === 2) return 107.1;
   }
 
   // 1.21 系
   if (major === 1 && minor === 21) {
-    if (patch <= 1) return 48;       // 1.21–1.21.1
-    if (patch <= 3) return 57;       // 1.21.2–1.21.3
-    if (patch === 4) return 61;      // 1.21.4
-    if (patch === 5) return 71;      // 1.21.5
-    if (patch === 6) return 80;      // 1.21.6
-    if (patch <= 8) return 81;       // 1.21.7–1.21.8
-    if (patch === 9) return 88.0;    // 1.21.9
-    if (patch === 11) return 94.1;   // 1.21.11
+    if (patch <= 1) return 48;
+    if (patch <= 3) return 57;
+    if (patch === 4) return 61;
+    if (patch === 5) return 71;
+    if (patch === 6) return 80;
+    if (patch <= 8) return 81;
+    if (patch === 9) return 88.0;
+    if (patch === 11) return 94.1;
   }
 
   // 1.20 系
   if (major === 1 && minor === 20) {
-    if (patch <= 1) return 15;       // 1.20–1.20.1
-    if (patch === 2) return 18;      // 1.20.2
-    if (patch <= 4) return 26;       // 1.20.3–1.20.4
-    if (patch <= 6) return 41;       // 1.20.5–1.20.6
+    if (patch <= 1) return 15;
+    if (patch === 2) return 18;
+    if (patch <= 4) return 26;
+    if (patch <= 6) return 41;
   }
 
   // 1.19 系
   if (major === 1 && minor === 19) {
-    if (patch <= 3) return 10;       // 1.19–1.19.3
-    if (patch === 4) return 12;      // 1.19.4
+    if (patch <= 3) return 10;
+    if (patch === 4) return 12;
   }
 
   // 1.18 系
   if (major === 1 && minor === 18) {
-    if (patch <= 1) return 8;        // 1.18–1.18.1
-    if (patch === 2) return 9;       // 1.18.2
+    if (patch <= 1) return 8;
+    if (patch === 2) return 9;
   }
 
-  // 1.17 系
+  // 1.17
   if (major === 1 && minor === 17) return 7;
 
   // 1.16 系
   if (major === 1 && minor === 16) {
-    if (patch === 1) return 5;       // 1.16.1
-    if (patch >= 2 && patch <= 5) return 6; // 1.16.2–1.16.5
+    if (patch === 1) return 5;
+    if (patch >= 2 && patch <= 5) return 6;
   }
 
   // 1.15
@@ -118,29 +117,55 @@ function getPackFormat(mc) {
   // 1.13
   if (major === 1 && minor === 13) return 4;
 
-  // それ以前は 4 に統一
   return 4;
 }
 
 
+// ===============================
+// function タグフォルダ（1.20.7〜最新は function）
+// ===============================
 function getFunctionTagFolder(mc) {
   const numeric = mc.match(/\d+\.\d+(\.\d+)?/);
   if (!numeric) return "functions";
 
   const [major, minor, patch = 0] = numeric[0].split(".").map(Number);
 
-  // ★ 1.20.7 以上は全部 function ★
+  // 1.20.7 以上は全部 function
   if (
-    (major === 1 && minor === 20 && patch >= 7) ||  // 1.20.7〜
-    (major === 1 && minor >= 21) ||                 // 1.21〜
-    (major >= 26)                                   // 26.x〜
+    (major === 1 && minor === 20 && patch >= 7) ||
+    (major === 1 && minor >= 21) ||
+    (major >= 26)
   ) {
     return "function";
   }
 
-  // それより前は functions
   return "functions";
 }
 
 
+// ===============================
+// pack.mcmeta（min/max 対応）
+// ===============================
+function createPackMcmeta(description, packFormat) {
+  // 1.21 以降は supported_formats が必須
+  if (packFormat >= 48) {
+    return {
+      pack: {
+        pack_format: packFormat,
+        description: description,
+        supported_formats: {
+          min_inclusive: packFormat,
+          max_inclusive: packFormat
+        }
+      }
+    };
+  }
 
+  // 1.20 以前は従来形式
+  return {
+    pack: {
+      pack_format: packFormat,
+      description: description
+    }
+  };
+}
