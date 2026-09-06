@@ -31,7 +31,11 @@ document.addEventListener("DOMContentLoaded", () => {
     zip.file(`${name}/data/${id}/functions/load.mcfunction`, "");
     zip.file(`${name}/data/${id}/functions/tick.mcfunction`, "");
 
-    // load.json / tick.json（function タグ）
+    // MCバージョンによって function タグのフォルダ名を切り替え
+    const tagFolder = isNewFunctionTag(mcVersion)
+      ? "function"      // 1.20.7 以降
+      : "functions";    // 1.20.6 以前
+
     const loadJson = {
       values: [`${id}:load`]
     };
@@ -39,8 +43,8 @@ document.addEventListener("DOMContentLoaded", () => {
       values: [`${id}:tick`]
     };
 
-    zip.file(`${name}/data/minecraft/tags/functions/load.json`, JSON.stringify(loadJson, null, 2));
-    zip.file(`${name}/data/minecraft/tags/functions/tick.json`, JSON.stringify(tickJson, null, 2));
+    zip.file(`${name}/data/minecraft/tags/${tagFolder}/load.json`, JSON.stringify(loadJson, null, 2));
+    zip.file(`${name}/data/minecraft/tags/${tagFolder}/tick.json`, JSON.stringify(tickJson, null, 2));
 
     // ZIP 生成
     const blob = await zip.generateAsync({ type: "blob" });
@@ -54,13 +58,14 @@ document.addEventListener("DOMContentLoaded", () => {
     log.value =
       `ZIP を生成しました。\n\n` +
       `pack_format: ${packFormat}\n` +
+      `function タグフォルダ: ${tagFolder}\n` +
       `ファイル名: ${name}-${mcVersion}-${dpVersion}.zip\n\n` +
       `フォルダ構成:\n` +
       `${name}/pack.mcmeta\n` +
       `${name}/data/${id}/functions/load.mcfunction\n` +
       `${name}/data/${id}/functions/tick.mcfunction\n` +
-      `${name}/data/minecraft/tags/functions/load.json\n` +
-      `${name}/data/minecraft/tags/functions/tick.json\n`;
+      `${name}/data/minecraft/tags/${tagFolder}/load.json\n` +
+      `${name}/data/minecraft/tags/${tagFolder}/tick.json\n`;
   });
 });
 
@@ -74,4 +79,15 @@ function getPackFormat(mc) {
   if (mc.startsWith("1.15")) return 5;
   if (mc.startsWith("1.14")) return 4;
   return 18;
+}
+
+// 1.20.7 以降なら function タグフォルダを切り替える
+function isNewFunctionTag(mc) {
+  // 1.20.7 以上かどうかを判定
+  const parts = mc.split(".");
+  const major = Number(parts[0]);
+  const minor = Number(parts[1]);
+  const patch = Number(parts[2] || 0);
+
+  return (major === 1 && minor === 20 && patch >= 7);
 }
