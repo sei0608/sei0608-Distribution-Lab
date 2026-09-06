@@ -54,7 +54,7 @@ function renderDetail(datapack) {
   datapack.versions.forEach(v => {
     const li = document.createElement("li");
     const a = document.createElement("a");
-    a.textContent = `${v.mc_version} - ${v.loader} ${v.datapack_version}`;
+    a.textContent = `${v.mc_version} - ${v.datapack_version}`;
     a.href = v.download_url;
     li.appendChild(a);
     ul.appendChild(li);
