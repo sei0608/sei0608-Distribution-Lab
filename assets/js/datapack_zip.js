@@ -95,16 +95,16 @@ function getFunctionTagFolder(mc) {
 
   const [major, minor, patch = 0] = numeric[0].split(".").map(Number);
 
-  // 1.20.7 以上は全部 "function"
+  // ★ 1.20.7 以上は全部 function ★
   if (
-    (major === 1 && minor === 20 && patch >= 7) ||      // 1.20.7〜
-    (major === 1 && minor > 20) ||                      // 1.21〜
-    (major > 1)                                         // 26.x など
+    (major === 1 && minor === 20 && patch >= 7) ||  // 1.20.7〜
+    (major === 1 && minor >= 21) ||                 // 1.21〜
+    (major >= 26)                                   // 26.x〜
   ) {
     return "function";
   }
 
-  // それより前は "functions"
+  // それより前は functions
   return "functions";
 }
 
