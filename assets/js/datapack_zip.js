@@ -15,6 +15,8 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     const packFormat = getPackFormat(mcVersion);
+    const tagFolder = getFunctionTagFolder(mcVersion);
+
     const zip = new JSZip();
 
     // pack.mcmeta
@@ -30,9 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
     zip.file(`${name}/data/${id}/functions/load.mcfunction`, "");
     zip.file(`${name}/data/${id}/functions/tick.mcfunction`, "");
 
-    // ★ ここが完全修正された部分 ★
-    const tagFolder = getFunctionTagFolder(mcVersion);
-
+    // load.json / tick.json
     const loadJson = { values: [`${id}:load`] };
     const tickJson = { values: [`${id}:tick`] };
 
@@ -52,40 +52,59 @@ document.addEventListener("DOMContentLoaded", () => {
       `ZIP を生成しました。\n\n` +
       `pack_format: ${packFormat}\n` +
       `function タグフォルダ: ${tagFolder}\n` +
-      `ファイル名: ${name}-${mcVersion}-${dpVersion}.zip\n\n` +
-      `フォルダ構成:\n` +
-      `${name}/pack.mcmeta\n` +
-      `${name}/data/${id}/functions/load.mcfunction\n` +
-      `${name}/data/${id}/functions/tick.mcfunction\n` +
-      `${name}/data/minecraft/tags/${tagFolder}/load.json\n` +
-      `${name}/data/minecraft/tags/${tagFolder}/tick.json\n`;
+      `ファイル名: ${name}-${mcVersion}-${dpVersion}.zip\n`;
   });
 });
 
-// pack_format 自動判定
+// pack_format 自動判定（最新対応）
 function getPackFormat(mc) {
-  if (mc.startsWith("1.20")) return 18;
-  if (mc.startsWith("1.19")) return 15;
-  if (mc.startsWith("1.18")) return 9;
-  if (mc.startsWith("1.17")) return 7;
-  if (mc.startsWith("1.16")) return 6;
-  if (mc.startsWith("1.15")) return 5;
-  if (mc.startsWith("1.14")) return 4;
+  const numeric = mc.match(/\d+\.\d+(\.\d+)?/);
+  if (!numeric) return 18;
+
+  const [major, minor, patch = 0] = numeric[0].split(".").map(Number);
+
+  // 26.x 系
+  if (major === 26) {
+    if (minor === 1) return 36;      // 26.1〜26.1.2
+    if (minor === 2) return 38;      // 26.2
+  }
+
+  // 1.21 系
+  if (major === 1 && minor === 21) return 30;
+
+  // 1.20.7〜1.20.11
+  if (major === 1 && minor === 20 && patch >= 7) return 26;
+
+  // 1.20〜1.20.6
+  if (major === 1 && minor === 20) return 18;
+
+  // 既存バージョン
+  if (major === 1 && minor === 19) return 15;
+  if (major === 1 && minor === 18) return 9;
+  if (major === 1 && minor === 17) return 7;
+  if (major === 1 && minor === 16) return 6;
+  if (major === 1 && minor === 15) return 5;
+  if (major === 1 && minor === 14) return 4;
+
   return 18;
 }
 
-// ★ 完全修正：MCバージョンを数字だけ抽出して比較する
+// function タグフォルダ自動判定
 function getFunctionTagFolder(mc) {
-  // 数字だけ抽出（例：1.20.7-pre1 → 1.20.7）
-  const numeric = mc.match(/\d+\.\d+\.\d+/);
+  const numeric = mc.match(/\d+\.\d+(\.\d+)?/);
   if (!numeric) return "functions";
 
-  const [major, minor, patch] = numeric[0].split(".").map(Number);
+  const [major, minor, patch = 0] = numeric[0].split(".").map(Number);
 
-  // 1.20.7 以上 → function
-  if (major === 1 && minor === 20 && patch >= 7) {
-    return "function";
-  }
+  // 1.20.7 以降はすべて function
+  if (major === 1 && minor === 20 && patch >= 7) return "function";
 
+  // 1.21 以降も function
+  if (major === 1 && minor >= 21) return "function";
+
+  // 26.x 系も function
+  if (major >= 26) return "function";
+
+  // それ以外は旧仕様
   return "functions";
 }
