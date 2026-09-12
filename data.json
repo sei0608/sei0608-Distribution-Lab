@@ -1,16 +1,30 @@
 {
   "datapacks": [
     {
-      "id": "fireball_sample",
+      "id": "sample_dp",
       "type": "datapack",
-      "name": "火の玉飛ばすデータパックサンプル",
+      "name": "SampleDataPack",
       "author": "sei0608",
-      "mcVersion": "26.1",
-      "tags": ["sample"],
-      "summary": "火の玉飛ばす用のデータパックサンプル",
-      "description": "火の玉飛ばす用のデータパックサンプルです。\nニンジン棒を右クリックで飛ばせます",
+      "mcVersion": "1.20.4",
+      "tags": ["便利", "システム"],
+      "summary": "サンプル用データパックの簡単な説明です。",
+      "description": "ここには詳細な説明文が入ります。",
       "versions": [
-        { "mcVersion": "26.1", "version": "1.0.0" }
+        { "mcVersion": "1.20.4", "version": "1.0.0" }
+      ]
+    },
+    {
+      "id": "custom_item_dp",
+      "type": "datapack",
+      "name": "CustomItemPack",
+      "author": "sei0608",
+      "mcVersion": "1.20.4",
+      "tags": ["アイテム", "サバイバル"],
+      "summary": "新しいカスタムアイテムを追加するデータパックです。",
+      "description": "特殊な効果を持つ武器やツールを追加します。\nクラフトレシピはゲーム内で確認可能です。",
+      "versions": [
+        { "mcVersion": "1.20.4", "version": "1.1.0" },
+        { "mcVersion": "1.20.1", "version": "1.0.0" }
       ]
     }
   ],
@@ -28,36 +42,22 @@
       "versions": [
         { "mcVersion": "1.20.1", "version": "1.0.0" }
       ]
-    }
-  ],
-  "resourcepacks": [
+    },
     {
-      "id": "sample_rp",
-      "type": "resourcepack",
-      "name": "SamplePack",
+      "id": "magic_utility_mod",
+      "type": "mod",
+      "name": "MagicUtility",
       "author": "sei0608",
+      "loader": "Fabric",
       "mcVersion": "1.20.4",
-      "tags": ["UI", "軽量化"],
-      "summary": "サンプルリソースパックです。",
-      "description": "リソースパックの詳細な説明です。",
+      "tags": ["魔法", "便利"],
+      "summary": "便利機能を追加するFabric用Modです。",
+      "description": "インベントリ整理や便利なショートカットキーを追加します。",
       "versions": [
-        { "mcVersion": "1.20.4", "version": "1.0.0" }
+        { "mcVersion": "1.20.4", "version": "2.0.0" }
       ]
     }
   ],
-  "worlds": [
-    {
-      "id": "sample_world",
-      "type": "world",
-      "name": "アスレチックワールド",
-      "author": "sei0608",
-      "mcVersion": "1.20.1",
-      "tags": ["アスレチック", "PVE"],
-      "summary": "自作のアスレチックワールドです。",
-      "description": "ステージ構成などの詳細説明です。",
-      "versions": [
-        { "mcVersion": "1.20.1", "version": "1.0.0" }
-      ]
-    }
-  ]
+  "resourcepacks": [],
+  "worlds": []
 }
