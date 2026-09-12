@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>リソースパック - sei0608のマイクラ配布ラボ</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>sei0608のマイクラ配布ラボ</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="datapacks.html">データパック</a></li>
+                <li><a href="mods.html">Mod</a></li>
+                <li><a href="resourcepacks.html">リソースパック</a></li>
+                <li><a href="worlds.html">ワールド</a></li>
+                <li><a href="tools.html">ツール</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>リソースパック一覧</h2>
+        <input type="text" id="search-input" class="search-box" placeholder="名前、タグ、MCバージョンで検索...">
+        
+        <div id="item-list"></div>
+        <div id="item-detail" class="detail-view" style="display: none;"></div>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script>
+        const resourcepacks = [
+            {
+                id: "sample_rp",
+                type: "resourcepack",
+                name: "SamplePack",
+                author: "sei0608",
+                mcVersion: "1.20.4",
+                tags: ["UI", "軽量化"],
+                summary: "サンプルリソースパックです。",
+                description: "リソースパックの詳細な説明です。",
+                versions: [
+                    { mcVersion: "1.20.4", version: "1.0.0" }
+                ]
+            }
+        ];
+
+        setupPage(resourcepacks);
+    </script>
+</body>
+</html>
