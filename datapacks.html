@@ -9,52 +9,21 @@
 
   <h1>Datapacks</h1>
 
-  <!-- ========================= -->
-  <!-- 🔍 検索エリア（必須） -->
-  <!-- ========================= -->
-  <div id="search-section">
+  <!-- 🔍 名前検索だけ（まずはこれを動かす） -->
+  <input id="search-input" placeholder="検索">
 
-    <!-- 名前検索 -->
-    <input id="search-input" placeholder="検索（名前・タグ・バージョン）">
+  <!-- 📄 一覧 -->
+  <div id="datapack-list"></div>
 
-    <!-- 現在の検索条件表示 -->
-    <div id="active-filters"></div>
-
-    <!-- タグボタン -->
-    <div id="tag-filter"></div>
-
-    <!-- バージョンフィルター（複数選択） -->
-    <select id="mc-version-select" multiple></select>
-
-  </div>
-
-  <!-- ========================= -->
-  <!-- 📄 一覧表示エリア（必須） -->
-  <!-- ========================= -->
-  <div id="list-section">
-    <div id="datapack-list"></div>
-  </div>
-
-  <!-- ========================= -->
-  <!-- 🔎 詳細ページ（必須） -->
-  <!-- ========================= -->
+  <!-- 🔎 詳細ページ -->
   <div id="detail-section" style="display:none;">
     <h2 id="detail-title"></h2>
-
     <div id="detail-tags"></div>
-
     <p id="detail-description"></p>
-
     <ul id="detail-versions"></ul>
-
     <a href="datapacks.html">← 戻る</a>
   </div>
 
-  <!-- ========================= -->
-  <!-- JS 読み込み -->
-  <!-- ========================= -->
-  <script src="js/common.js"></script>
   <script src="js/datapacks.js"></script>
-
 </body>
 </html>
