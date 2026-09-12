@@ -1,3 +1,44 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ツール - sei0608のマイクラ配布ラボ</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- JSZip (Zip生成用ライブラリ) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>sei0608のマイクラ配布ラボ</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="datapacks.html">データパック</a></li>
+                <li><a href="mods.html">Mod</a></li>
+                <li><a href="resourcepacks.html">リソースパック</a></li>
+                <li><a href="worlds.html">ワールド</a></li>
+                <li><a href="tools.html">ツール</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>自作ツール・データパック生成</h2>
+        
+        <div style="background-color: #1e1e1e; padding: 20px; border-radius: 6px; margin-top: 20px;">
+            <h3>データパック雛形生成ツール</h3>
+            <p style="margin-bottom: 20px; color: #aaa;">バージョンごとのフォルダ構造（functions / function）および pack_format を自動判別して出力します。</p>
+
+            <form id="dp-generator-form">
+                <div class="form-group">
+                    <label for="dp-name">名前:</label>
+                    <input type="text" id="dp-name" required placeholder="例: MyDatapack">
+                </div>
+                <div class="form-group">
+                    <label for="dp-id">ID (半角英数字・アンダースコアのみ):</label>
+                    <input type="text" id="dp-id" required placeholder="例: my_datapack" pattern="[a-z0-9_]+">
+                </div>
 <div class="form-group">
     <label for="dp-mcversion">MCバージョン指定:</label>
     <select id="dp-mcversion">
@@ -11,3 +52,25 @@
         <option value="custom">カスタム（pack_formatを直接指定）</option>
     </select>
 </div>
+
+                <div class="form-group" id="custom-format-group" style="display: none;">
+                    <label for="dp-custom-format">pack_format の数値を指定:</label>
+                    <input type="number" id="dp-custom-format" placeholder="例: 61">
+                </div>
+
+                <div class="form-group">
+                    <label for="dp-version">データパックバージョン:</label>
+                    <input type="text" id="dp-version" required placeholder="例: 1.0.0">
+                </div>
+                <div class="form-group">
+                    <label for="dp-description">説明:</label>
+                    <textarea id="dp-description" rows="3" placeholder="データパックの説明"></textarea>
+                </div>
+                <button type="submit" class="btn-generate">Zipファイルを生成してダウンロード</button>
+            </form>
+        </div>
+    </main>
+
+    <script src="js/generator.js"></script>
+</body>
+</html>
