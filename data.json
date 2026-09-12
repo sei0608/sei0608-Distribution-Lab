@@ -1,16 +1,16 @@
 {
   "datapacks": [
     {
-      "id": "sample_dp",
+      "id": "火の玉飛ばすデータパックサンプル",
       "type": "datapack",
-      "name": "SampleDataPack",
+      "name": "火の玉飛ばすデータパックサンプル",
       "author": "sei0608",
-      "mcVersion": "1.20.4",
-      "tags": ["便利", "システム"],
-      "summary": "サンプル用データパックの簡単な説明です。",
-      "description": "ここには詳細な説明文が入ります。",
+      "mcVersion": "26.1",
+      "tags": ["sample"],
+      "summary": "火の玉飛ばすデータパックサンプル",
+      "description": "火の玉飛ばすデータパックサンプルです。\nニンジン棒を右クリックで飛ばせます。",
       "versions": [
-        { "mcVersion": "1.20.4", "version": "1.0.0" }
+        { "mcVersion": "26.1", "version": "1.0.0" }
       ]
     },
     {
