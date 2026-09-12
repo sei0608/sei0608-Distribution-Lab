@@ -55,7 +55,12 @@ function showList() {
   document.getElementById("detail-section").style.display = "none";
 
   renderItemList(document.getElementById("mod-list"), allMods, "mods");
+
+  // ★ ここに置く
+  renderTagButtons(allMods);
+  setupVersionSelect(allMods);
 }
+
 
 function showDetail(id) {
   const mod = allMods.find(m => m.id === id);
