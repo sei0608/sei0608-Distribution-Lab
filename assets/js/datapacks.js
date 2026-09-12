@@ -55,7 +55,11 @@ function showList() {
   document.getElementById("detail-section").style.display = "none";
 
   renderItemList(document.getElementById("datapack-list"), allDatapacks, "datapacks");
+
+  renderTagButtons(allDatapacks);
+  setupVersionSelect(allDatapacks);
 }
+
 
 function showDetail(id) {
   const dp = allDatapacks.find(d => d.id === id);
