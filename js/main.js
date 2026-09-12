@@ -5,7 +5,10 @@ async function initCategoryPage(categoryKey) {
     const itemDetail = document.getElementById('item-detail');
 
     try {
-        const response = await fetch('data.json');
+        // キャッシュバスター (?v=タイムスタンプ) を追加して常に最新のdata.jsonを取得
+        const cacheBuster = Date.now();
+        const response = await fetch(`data.json?v=${cacheBuster}`);
+        
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
