@@ -16,14 +16,12 @@ async function loadResourcepacks() {
 
 function setupMcVersionSelect() {
   const select = document.getElementById("mc-version-select");
-
-  // 全リソースパックの MC バージョン一覧を抽出
   const versions = new Set();
+
   allResourcepacks.forEach(rp => {
     rp.versions.forEach(v => versions.add(v.mc_version));
   });
 
-  // セレクトに追加
   versions.forEach(v => {
     const opt = document.createElement("option");
     opt.value = v;
@@ -31,7 +29,6 @@ function setupMcVersionSelect() {
     select.appendChild(opt);
   });
 
-  // 変更時にフィルタ
   select.addEventListener("change", applyFilters);
 }
 
@@ -41,12 +38,8 @@ function applyFilters() {
 
   let filtered = allResourcepacks;
 
-  // 名前・タグ検索
-  if (text !== "") {
-    filtered = filterItems(filtered, text);
-  }
+  if (text !== "") filtered = filterItems(filtered, text);
 
-  // MCバージョン検索
   if (mcVersion !== "") {
     filtered = filtered.filter(rp =>
       rp.versions.some(v => v.mc_version === mcVersion)
@@ -84,9 +77,7 @@ function showDetail(id) {
 
 document.addEventListener("DOMContentLoaded", () => {
   const input = document.getElementById("search-input");
-  if (input) {
-    input.addEventListener("input", applyFilters);
-  }
+  if (input) input.addEventListener("input", applyFilters);
 
   loadResourcepacks();
 });
