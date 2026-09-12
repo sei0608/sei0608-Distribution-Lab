@@ -28,7 +28,7 @@
         
         <div style="background-color: #1e1e1e; padding: 20px; border-radius: 6px; margin-top: 20px;">
             <h3>データパック雛形生成ツール</h3>
-            <p style="margin-bottom: 20px; color: #aaa;">バージョンごとのフォルダ構造（functions / function）および pack_format を自動判別して出力します。</p>
+            <p style="margin-bottom: 20px; color: #aaa;">バージョンごとのフォルダ構造（functions / function）および MCMETA 形式（pack_format / min_max_format）を自動判別して出力します。</p>
 
             <form id="dp-generator-form">
                 <div class="form-group">
@@ -39,23 +39,38 @@
                     <label for="dp-id">ID (半角英数字・アンダースコアのみ):</label>
                     <input type="text" id="dp-id" required placeholder="例: my_datapack" pattern="[a-z0-9_]+">
                 </div>
-<div class="form-group">
-    <label for="dp-mcversion">MCバージョン指定:</label>
-    <select id="dp-mcversion">
-        <option value="26.2">26.2 カオス・キューブド (最新 / function)</option>
-        <option value="all_modern">1.20.1 〜 26.x 広範対応 (supported_formats指定)</option>
-        <option value="1.21.4">1.21.4 (pack_format: 61 / function)</option>
-        <option value="1.21.1">1.21 / 1.21.1 (pack_format: 48 / function)</option>
-        <option value="1.20.6">1.20.5 / 1.20.6 (pack_format: 41 / function)</option>
-        <option value="1.20.4">1.20.3 / 1.20.4 (pack_format: 26 / functions)</option>
-        <option value="1.20.1">1.20 / 1.20.1 (pack_format: 15 / functions)</option>
-        <option value="custom">カスタム（pack_formatを直接指定）</option>
-    </select>
-</div>
+                <div class="form-group">
+                    <label for="dp-mcversion">MCバージョン指定:</label>
+                    <select id="dp-mcversion">
+                        <option value="26.2">26.2 (Format: 107.1 / function / min_max_format)</option>
+                        <option value="26.1">26.1 (Format: 101.1 / function / min_max_format)</option>
+                        <option value="1.21.11">1.21.11 (Format: 94.1 / function / min_max_format)</option>
+                        <option value="1.21.9-1.21.10">1.21.9 – 1.21.10 (Format: 88.0 / function / min_max_format)</option>
+                        <option value="1.21.7-1.21.8">1.21.7 – 1.21.8 (Format: 81 / function)</option>
+                        <option value="1.21.6">1.21.6 (Format: 80 / function)</option>
+                        <option value="1.21.5">1.21.5 (Format: 71 / function)</option>
+                        <option value="1.21.4">1.21.4 (Format: 61 / function)</option>
+                        <option value="1.21.2-1.21.3">1.21.2 – 1.21.3 (Format: 57 / function)</option>
+                        <option value="1.21-1.21.1">1.21 – 1.21.1 (Format: 48 / functions)</option>
+                        <option value="1.20.5-1.20.6">1.20.5 – 1.20.6 (Format: 41 / functions)</option>
+                        <option value="1.20.3-1.20.4">1.20.3 – 1.20.4 (Format: 26 / functions)</option>
+                        <option value="1.20.2">1.20.2 (Format: 18 / functions)</option>
+                        <option value="1.20-1.20.1">1.20 – 1.20.1 (Format: 15 / functions)</option>
+                        <option value="1.19.4">1.19.4 (Format: 12 / functions)</option>
+                        <option value="1.19-1.19.3">1.19 – 1.19.3 (Format: 10 / functions)</option>
+                        <option value="1.18.2">1.18.2 (Format: 9 / functions)</option>
+                        <option value="1.18-1.18.1">1.18 – 1.18.1 (Format: 8 / functions)</option>
+                        <option value="1.17-1.17.1">1.17 – 1.17.1 (Format: 7 / functions)</option>
+                        <option value="1.16.2-1.16.5">1.16.2 – 1.16.5 (Format: 6 / functions)</option>
+                        <option value="1.15-1.16.1">1.15 – 1.16.1 (Format: 5 / functions)</option>
+                        <option value="1.13-1.14.4">1.13 – 1.14.4 (Format: 4 / functions)</option>
+                        <option value="custom">カスタム（pack_formatを直接指定）</option>
+                    </select>
+                </div>
 
                 <div class="form-group" id="custom-format-group" style="display: none;">
                     <label for="dp-custom-format">pack_format の数値を指定:</label>
-                    <input type="number" id="dp-custom-format" placeholder="例: 61">
+                    <input type="number" step="0.1" id="dp-custom-format" placeholder="例: 107.1">
                 </div>
 
                 <div class="form-group">
