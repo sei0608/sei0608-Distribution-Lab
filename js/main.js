@@ -22,6 +22,29 @@ async function initCategoryPage(categoryKey) {
     }
 }
 
+// 範囲文字列（例: "1.21.8-1.21.11" や "1.21.8–1.21.10"）から含まれるバージョンを展開する関数
+function expandVersionRange(text) {
+    const normalized = text.replace(/–/g, '-'); // ハイフンの表記揺れを統一
+    const rangeMatch = normalized.match(/(\d+\.\d+)\.(\d+)\s*-\s*(\d+\.\d+)\.(\d+)/);
+
+    if (rangeMatch) {
+        const prefixA = rangeMatch[1];
+        const startNum = parseInt(rangeMatch[2], 10);
+        const prefixB = rangeMatch[3];
+        const endNum = parseInt(rangeMatch[4], 10);
+
+        // バージョン接頭辞（例: "1.21"）が一致している場合、間の数字を展開
+        if (prefixA === prefixB && startNum <= endNum) {
+            const list = [];
+            for (let i = startNum; i <= endNum; i++) {
+                list.push(`${prefixA}.${i}`);
+            }
+            return list;
+        }
+    }
+    return [text];
+}
+
 // 共通表示・検索処理
 function setupPage(dataList, searchInput, itemList, itemDetail) {
     function renderList(items) {
@@ -106,7 +129,7 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
         });
     }
 
-    // 複合即時検索機能 (スペース[全角/半角]・カンマ・読点での区切り対応)
+    // 複合即時検索機能 (範囲展開対応)
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             const rawQuery = e.target.value.toLowerCase().trim();
@@ -115,15 +138,18 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
                 return;
             }
 
-            // 半角スペース, 全角スペース, カンマ(,), 読点(、) のいずれかで文字列を分割
+            // スペース、カンマ、読点でキーワードを分離
             const keywords = rawQuery.split(/[\s,、]+/).filter(k => k.length > 0);
 
-            // すべてのキーワードを満たすアイテム（AND検索）を抽出
             const filtered = dataList.filter(item => {
+                // アイテムの mcVersion やバージョン履歴の指定から範囲を展開
+                const mcVersionsTarget = [item.mcVersion, ...(item.versions ? item.versions.map(v => v.mcVersion) : [])];
+                const expandedMcVersions = mcVersionsTarget.flatMap(v => v ? expandVersionRange(v) : []);
+
                 return keywords.every(kw => {
                     const nameMatch = item.name.toLowerCase().includes(kw);
                     const tagMatch = item.tags.some(t => t.toLowerCase().includes(kw));
-                    const mcMatch = item.mcVersion.toLowerCase().includes(kw);
+                    const mcMatch = expandedMcVersions.some(v => v.toLowerCase().includes(kw));
                     const loaderMatch = item.loader ? item.loader.toLowerCase().includes(kw) : false;
                     
                     return nameMatch || tagMatch || mcMatch || loaderMatch;
