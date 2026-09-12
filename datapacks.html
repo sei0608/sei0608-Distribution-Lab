@@ -2,43 +2,59 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>データパック一覧</title>
-  <link rel="stylesheet" href="assets/css/style.css">
-  <script src="assets/js/common.js" defer></script>
-  <script src="assets/js/datapacks.js" defer></script>
+  <title>Datapacks</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>データパック一覧</h1>
-    <nav>
-      <a href="index.html">ホーム</a>
-      <a href="mods.html">Mod</a>
-      <a href="datapacks.html">データパック</a>
-      <a href="resourcepacks.html">リソースパック</a>
-      <a href="tools.html">ツール</a>
-    </nav>
-  </header>
 
-  <main>
-    <section id="search-section">
-      <input id="search-input" type="text" placeholder="名前・タグで検索">
+  <h1>Datapacks</h1>
 
-      <!-- MCバージョン検索 -->
-      <select id="mc-version-select">
-        <option value="">MCバージョン（すべて）</option>
-      </select>
-    </section>
+  <!-- ========================= -->
+  <!-- 🔍 検索エリア（必須） -->
+  <!-- ========================= -->
+  <div id="search-section">
 
-    <section id="list-section">
-      <div id="datapack-list"></div>
-    </section>
+    <!-- 名前検索 -->
+    <input id="search-input" placeholder="検索（名前・タグ・バージョン）">
 
-    <section id="detail-section" style="display:none;">
-      <h2 id="detail-title"></h2>
-      <div id="detail-tags" class="tag-list"></div>
-      <p id="detail-description"></p>
-      <ul id="detail-versions"></ul>
-    </section>
-  </main>
+    <!-- 現在の検索条件表示 -->
+    <div id="active-filters"></div>
+
+    <!-- タグボタン -->
+    <div id="tag-filter"></div>
+
+    <!-- バージョンフィルター（複数選択） -->
+    <select id="mc-version-select" multiple></select>
+
+  </div>
+
+  <!-- ========================= -->
+  <!-- 📄 一覧表示エリア（必須） -->
+  <!-- ========================= -->
+  <div id="list-section">
+    <div id="datapack-list"></div>
+  </div>
+
+  <!-- ========================= -->
+  <!-- 🔎 詳細ページ（必須） -->
+  <!-- ========================= -->
+  <div id="detail-section" style="display:none;">
+    <h2 id="detail-title"></h2>
+
+    <div id="detail-tags"></div>
+
+    <p id="detail-description"></p>
+
+    <ul id="detail-versions"></ul>
+
+    <a href="datapacks.html">← 戻る</a>
+  </div>
+
+  <!-- ========================= -->
+  <!-- JS 読み込み -->
+  <!-- ========================= -->
+  <script src="js/common.js"></script>
+  <script src="js/datapacks.js"></script>
+
 </body>
 </html>
