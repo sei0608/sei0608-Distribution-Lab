@@ -8,44 +8,12 @@ async function loadResourcepacks() {
   const res = await fetch("data/resourcepacks.json");
   allResourcepacks = await res.json();
 
-  setupMcVersionSelect();
-
   const id = getQueryParam("id");
   id ? showDetail(id) : showList();
 }
 
-function setupMcVersionSelect() {
-  const select = document.getElementById("mc-version-select");
-  const versions = new Set();
-
-  allResourcepacks.forEach(rp => {
-    rp.versions.forEach(v => versions.add(v.mc_version));
-  });
-
-  versions.forEach(v => {
-    const opt = document.createElement("option");
-    opt.value = v;
-    opt.textContent = v;
-    select.appendChild(opt);
-  });
-
-  select.addEventListener("change", applyFilters);
-}
-
 function applyFilters() {
-  const text = document.getElementById("search-input").value.trim().toLowerCase();
-  const mcVersion = document.getElementById("mc-version-select").value;
-
-  let filtered = allResourcepacks;
-
-  if (text !== "") filtered = filterItems(filtered, text);
-
-  if (mcVersion !== "") {
-    filtered = filtered.filter(rp =>
-      rp.versions.some(v => v.mc_version === mcVersion)
-    );
-  }
-
+  const filtered = filterItems(allResourcepacks);
   renderItemList(document.getElementById("resourcepack-list"), filtered, "resourcepacks");
 }
 
@@ -59,7 +27,6 @@ function showList() {
   renderTagButtons(allResourcepacks);
   setupVersionSelect(allResourcepacks);
 }
-
 
 function showDetail(id) {
   const rp = allResourcepacks.find(r => r.id === id);
@@ -88,6 +55,5 @@ document.addEventListener("DOMContentLoaded", () => {
     applyFilters();
   });
 
-  loadResourcepacks(); // mods.js の場合
+  loadResourcepacks();
 });
-
