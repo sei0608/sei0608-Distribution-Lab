@@ -1,3 +1,8 @@
+// ===============================
+// 共通処理（一覧ページ用）
+// ===============================
+
+// 名前・タグ・バージョン検索
 function filterItems(items, query) {
   const q = query.trim().toLowerCase();
   if (q === "") return items;
@@ -7,39 +12,37 @@ function filterItems(items, query) {
     const tagMatch = (item.tags || []).some(tag =>
       tag.toLowerCase().includes(q)
     );
-    return nameMatch || tagMatch;
+    const versionMatch = (item.versions || []).some(v =>
+      v.mc_version.toLowerCase().includes(q)
+    );
+    return nameMatch || tagMatch || versionMatch;
   });
 }
 
+// カード生成（改善版）
+function createCard(item, type) {
+  return `
+    <div class="card" onclick="location.href='${type}.html?id=${item.id}'">
+      <div class="card-header">
+        <h3>${item.name}</h3>
+        <span class="version-pill">${item.versions?.[0]?.mc_version || ""}</span>
+      </div>
+
+      <div class="tag-container">
+        ${(item.tags || []).map(t => `<span class="tag">${t}</span>`).join("")}
+      </div>
+
+      <p class="card-desc">${item.description}</p>
+    </div>
+  `;
+}
+
+// 一覧描画
 function renderItemList(container, items, type) {
-  container.innerHTML = "";
+  if (!items.length) {
+    container.innerHTML = `<div class="no-result">該当するデータがありません。</div>`;
+    return;
+  }
 
-  items.forEach(item => {
-    const card = document.createElement("div");
-    card.className = "card";
-
-    const title = document.createElement("h3");
-    title.textContent = item.name;
-    card.appendChild(title);
-
-    const tagsDiv = document.createElement("div");
-    tagsDiv.className = "tag-list";
-    (item.tags || []).forEach(tag => {
-      const span = document.createElement("span");
-      span.textContent = tag;
-      tagsDiv.appendChild(span);
-    });
-    card.appendChild(tagsDiv);
-
-    const desc = document.createElement("p");
-    desc.textContent = item.description;
-    card.appendChild(desc);
-
-    const link = document.createElement("a");
-    link.textContent = "ダウンロードページへ";
-    link.href = `${type}.html?id=${encodeURIComponent(item.id)}`;
-    card.appendChild(link);
-
-    container.appendChild(card);
-  });
+  container.innerHTML = items.map(item => createCard(item, type)).join("");
 }
