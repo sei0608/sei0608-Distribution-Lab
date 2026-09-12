@@ -106,22 +106,28 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
         });
     }
 
-    // 即時検索機能
+    // 複合即時検索機能 (スペース[全角/半角]・カンマ・読点での区切り対応)
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
-            const query = e.target.value.toLowerCase().trim();
-            if (query === '') {
+            const rawQuery = e.target.value.toLowerCase().trim();
+            if (rawQuery === '') {
                 renderList(dataList);
                 return;
             }
 
+            // 半角スペース, 全角スペース, カンマ(,), 読点(、) のいずれかで文字列を分割
+            const keywords = rawQuery.split(/[\s,、]+/).filter(k => k.length > 0);
+
+            // すべてのキーワードを満たすアイテム（AND検索）を抽出
             const filtered = dataList.filter(item => {
-                const nameMatch = item.name.toLowerCase().includes(query);
-                const tagMatch = item.tags.some(t => t.toLowerCase().includes(query));
-                const mcMatch = item.mcVersion.toLowerCase().includes(query);
-                const loaderMatch = item.loader ? item.loader.toLowerCase().includes(query) : false;
-                
-                return nameMatch || tagMatch || mcMatch || loaderMatch;
+                return keywords.every(kw => {
+                    const nameMatch = item.name.toLowerCase().includes(kw);
+                    const tagMatch = item.tags.some(t => t.toLowerCase().includes(kw));
+                    const mcMatch = item.mcVersion.toLowerCase().includes(kw);
+                    const loaderMatch = item.loader ? item.loader.toLowerCase().includes(kw) : false;
+                    
+                    return nameMatch || tagMatch || mcMatch || loaderMatch;
+                });
             });
 
             renderList(filtered);
