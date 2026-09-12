@@ -12,28 +12,23 @@ async function loadDatapacks() {
   id ? showDetail(id) : showList();
 }
 
-function applyFilters() {
-  const filtered = filterItems(allDatapacks);
-  renderItemList(document.getElementById("datapack-list"), filtered, "datapacks");
-}
-
 function showList() {
-  document.getElementById("search-section").style.display = "";
-  document.getElementById("list-section").style.display = "";
   document.getElementById("detail-section").style.display = "none";
 
-  renderItemList(document.getElementById("datapack-list"), allDatapacks, "datapacks");
-
-  renderTagButtons(allDatapacks);
-  setupVersionSelect(allDatapacks);
+  const list = document.getElementById("datapack-list");
+  list.innerHTML = allDatapacks.map(dp => `
+    <div class="card" onclick="location.href='datapacks.html?id=${dp.id}'">
+      <h3>${dp.name}</h3>
+      <p>${dp.description}</p>
+    </div>
+  `).join("");
 }
 
 function showDetail(id) {
   const dp = allDatapacks.find(d => d.id === id);
   if (!dp) return;
 
-  document.getElementById("search-section").style.display = "none";
-  document.getElementById("list-section").style.display = "none";
+  document.getElementById("datapack-list").innerHTML = "";
   document.getElementById("detail-section").style.display = "";
 
   document.getElementById("detail-title").textContent = dp.name;
@@ -50,9 +45,18 @@ document.addEventListener("DOMContentLoaded", () => {
   const input = document.getElementById("search-input");
 
   input.addEventListener("input", () => {
-    searchText = input.value.trim();
-    updateFiltersUI();
-    applyFilters();
+    const q = input.value.toLowerCase();
+    const filtered = allDatapacks.filter(dp =>
+      dp.name.toLowerCase().includes(q)
+    );
+
+    const list = document.getElementById("datapack-list");
+    list.innerHTML = filtered.map(dp => `
+      <div class="card" onclick="location.href='datapacks.html?id=${dp.id}'">
+        <h3>${dp.name}</h3>
+        <p>${dp.description}</p>
+      </div>
+    `).join("");
   });
 
   loadDatapacks();
