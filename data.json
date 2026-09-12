@@ -5,7 +5,7 @@
       "type": "datapack",
       "name": "火の玉飛ばすデータパックサンプル",
       "author": "sei0608",
-      "mcVersion": "1.20.4",
+      "mcVersion": "26.1",
       "tags": ["sample"],
       "summary": "火の玉飛ばす用のデータパックサンプル",
       "description": "火の玉飛ばす用のデータパックサンプルです。\nニンジン棒を右クリックで飛ばせます",
