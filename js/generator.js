@@ -8,49 +8,60 @@ document.getElementById('dp-generator-form').addEventListener('submit', async fu
     const dpVersion = document.getElementById('dp-version').value.trim();
     const description = document.getElementById('dp-description').value.trim();
 
-    // バージョンごとの詳細定義テーブル (pack_format, supported_formats, plural: sをつけるか)
+    // バージョン定義テーブル
+    // plural: true -> functions / false -> function
+    // useRange: true -> min_format & max_format / false -> pack_format
     const versionTable = {
-        // --- 26.x 世代 ---
-        "26.2":   { format: 61, supported: [61, 65], plural: false }, // カオス・キューブド対応
-        "26.1":   { format: 61, supported: [61, 61], plural: false },
-        
-        // --- 1.21.x 世代 ---
-        "1.21.4": { format: 61, supported: [61, 61], plural: false },
-        "1.21.2": { format: 57, supported: [57, 57], plural: false },
-        "1.21.1": { format: 48, supported: [48, 48], plural: false },
-        "1.20.6": { format: 41, supported: [41, 41], plural: false },
-
-        // --- 1.20.4 以前（functions と s がつく旧仕様）---
-        "1.20.4": { format: 26, supported: [26, 26], plural: true },
-        "1.20.2": { format: 18, supported: [18, 18], plural: true },
-        "1.20.1": { format: 15, supported: [15, 15], plural: true },
-
-        // 全対応 / カスタム
-        "all_modern": { format: 61, supported: [15, 80], plural: false },
-        "custom": { format: parseInt(customFormatInput) || 61, supported: null, plural: false }
+        "26.2":           { minFormat: 107, maxFormat: 107, plural: false, useRange: true },
+        "26.1":           { minFormat: 101, maxFormat: 101, plural: false, useRange: true },
+        "1.21.11":        { minFormat: 94,  maxFormat: 94,  plural: false, useRange: true },
+        "1.21.9-1.21.10": { minFormat: 88,  maxFormat: 88,  plural: false, useRange: true },
+        "1.21.7-1.21.8":  { format: 81, plural: false, useRange: false },
+        "1.21.6":         { format: 80, plural: false, useRange: false },
+        "1.21.5":         { format: 71, plural: false, useRange: false },
+        "1.21.4":         { format: 61, plural: false, useRange: false },
+        "1.21.2-1.21.3":  { format: 57, plural: false, useRange: false },
+        "1.21-1.21.1":    { format: 48, plural: true,  useRange: false },
+        "1.20.5-1.20.6":  { format: 41, plural: true,  useRange: false },
+        "1.20.3-1.20.4":  { format: 26, plural: true,  useRange: false },
+        "1.20.2":         { format: 18, plural: true,  useRange: false },
+        "1.20-1.20.1":    { format: 15, plural: true,  useRange: false },
+        "1.19.4":         { format: 12, plural: true,  useRange: false },
+        "1.19-1.19.3":    { format: 10, plural: true,  useRange: false },
+        "1.18.2":         { format: 9,  plural: true,  useRange: false },
+        "1.18-1.18.1":    { format: 8,  plural: true,  useRange: false },
+        "1.17-1.17.1":    { format: 7,  plural: true,  useRange: false },
+        "1.16.2-1.16.5":  { format: 6,  plural: true,  useRange: false },
+        "1.15-1.16.1":    { format: 5,  plural: true,  useRange: false },
+        "1.13-1.14.4":    { format: 4,  plural: true,  useRange: false },
+        "custom":         { format: parseFloat(customFormatInput) || 107, plural: false, useRange: false }
     };
 
     const targetConfig = versionTable[selectedVersion] || versionTable["26.2"];
 
-    // sが付くか判定 (1.20.4以前: "functions", 1.20.5以降: "function")
+    // フォルダ名切り替え (1.21.1以前: functions / 1.21.2以降: function)
     const functionFolderName = targetConfig.plural ? "functions" : "function";
 
     const zip = new JSZip();
 
     // 1. pack.mcmeta の構築
     const packObj = {
-        pack_format: targetConfig.format,
         description: description || `${name} v${dpVersion}`
     };
 
-    if (targetConfig.supported) {
-        packObj.supported_formats = targetConfig.supported;
+    if (targetConfig.useRange) {
+        // 1.21.9 以降の形式
+        packObj.min_format = targetConfig.minFormat;
+        packObj.max_format = targetConfig.maxFormat;
+    } else {
+        // 1.21.8 以前の形式
+        packObj.pack_format = targetConfig.format;
     }
 
     const mcmetaContent = { pack: packObj };
     zip.file("pack.mcmeta", JSON.stringify(mcmetaContent, null, 4));
 
-    // 2. mcfunction ファイルの作成 (フォルダ名自動切替)
+    // 2. mcfunction ファイルの作成
     const functionsDir = zip.folder(`data/${id}/${functionFolderName}`);
     functionsDir.file("load.mcfunction", `# ${name} - Load Function\ntellraw @a "Loaded ${name} v${dpVersion}"`);
     functionsDir.file("tick.mcfunction", `# ${name} - Tick Function`);
