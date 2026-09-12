@@ -77,7 +77,12 @@ function showDetail(id) {
 
 document.addEventListener("DOMContentLoaded", () => {
   const input = document.getElementById("search-input");
-  if (input) input.addEventListener("input", applyFilters);
 
-  loadDatapacks();
+  input.addEventListener("input", () => {
+    searchText = input.value.trim();
+    updateFiltersUI();
+    applyFilters();
+  });
+
+  loadDatapacks(); // mods.js の場合
 });
