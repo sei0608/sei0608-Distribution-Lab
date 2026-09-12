@@ -1,9 +1,26 @@
-// 共通表示関数
-function setupPage(dataList) {
+// data.json からデータを取得してページを初期化する処理
+async function initCategoryPage(categoryKey) {
     const searchInput = document.getElementById('search-input');
     const itemList = document.getElementById('item-list');
     const itemDetail = document.getElementById('item-detail');
 
+    try {
+        const response = await fetch('data.json');
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const allData = await response.json();
+        const dataList = allData[categoryKey] || [];
+
+        setupPage(dataList, searchInput, itemList, itemDetail);
+    } catch (error) {
+        console.error('データの読み込みに失敗しました:', error);
+        itemList.innerHTML = '<p style="color: #ff6b6b;">データの読み込みに失敗しました。</p>';
+    }
+}
+
+// 共通表示・検索処理
+function setupPage(dataList, searchInput, itemList, itemDetail) {
     function renderList(items) {
         itemList.innerHTML = '';
         if (items.length === 0) {
@@ -108,6 +125,6 @@ function setupPage(dataList) {
         });
     }
 
-    // 初期化表示
+    // 初期表示
     renderList(dataList);
 }
