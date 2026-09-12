@@ -1,0 +1,64 @@
+{
+  "datapacks": [
+    {
+      "id": "sample_dp",
+      "type": "datapack",
+      "name": "SampleDataPack",
+      "author": "sei0608",
+      "mcVersion": "1.20.4",
+      "tags": ["便利", "システム"],
+      "summary": "サンプル用データパックの簡単な説明です。",
+      "description": "ここには詳細な説明文が入ります。\n改行などもそのまま反映されます。",
+      "versions": [
+        { "mcVersion": "1.20.4", "version": "1.0.0" },
+        { "mcVersion": "1.20.1", "version": "0.9.0" }
+      ]
+    }
+  ],
+  "mods": [
+    {
+      "id": "sample_mod",
+      "type": "mod",
+      "name": "SampleMod",
+      "author": "sei0608",
+      "loader": "Forge",
+      "mcVersion": "1.20.1",
+      "tags": ["ユーティリティ"],
+      "summary": "サンプルModです。",
+      "description": "Modの詳細な説明欄です。",
+      "versions": [
+        { "mcVersion": "1.20.1", "version": "1.0.0" }
+      ]
+    }
+  ],
+  "resourcepacks": [
+    {
+      "id": "sample_rp",
+      "type": "resourcepack",
+      "name": "SamplePack",
+      "author": "sei0608",
+      "mcVersion": "1.20.4",
+      "tags": ["UI", "軽量化"],
+      "summary": "サンプルリソースパックです。",
+      "description": "リソースパックの詳細な説明です。",
+      "versions": [
+        { "mcVersion": "1.20.4", "version": "1.0.0" }
+      ]
+    }
+  ],
+  "worlds": [
+    {
+      "id": "sample_world",
+      "type": "world",
+      "name": "アスレチックワールド",
+      "author": "sei0608",
+      "mcVersion": "1.20.1",
+      "tags": ["アスレチック", "PVE"],
+      "summary": "自作のアスレチックワールドです。",
+      "description": "ステージ構成などの詳細説明です。",
+      "versions": [
+        { "mcVersion": "1.20.1", "version": "1.0.0" }
+      ]
+    }
+  ]
+}
