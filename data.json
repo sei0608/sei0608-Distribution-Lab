@@ -14,17 +14,16 @@
       ]
     },
     {
-      "id": "custom_item_dp",
+      "id": "mining-datapack",
       "type": "datapack",
-      "name": "CustomItemPack",
+      "name": "整地データパック",
       "author": "sei0608",
-      "mcVersion": "1.20.4",
-      "tags": ["アイテム", "サバイバル"],
-      "summary": "新しいカスタムアイテムを追加するデータパックです。",
-      "description": "特殊な効果を持つ武器やツールを追加します。\nクラフトレシピはゲーム内で確認可能です。",
+      "mcVersion": "1.21.11",
+      "tags": ["mining", "整地"],
+      "summary": "整地するようデータパック",
+      "description": "アイテムは勝手に消えポイントになります。\nこのポイントでアイテムを購入できます。",
       "versions": [
-        { "mcVersion": "1.20.4", "version": "1.1.0" },
-        { "mcVersion": "1.20.1", "version": "1.0.0" }
+        { "mcVersion": "1.21.11", "version": "1.0.0" }
       ]
     }
   ],
