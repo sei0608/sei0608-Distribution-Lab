@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ツール - sei0608のマイクラ配布ラボ</title>
+    <link rel="stylesheet" href="css/style.css">
+    <!-- JSZip (Zip生成用ライブラリ) -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+</head>
+<body>
+    <header>
+        <h1>sei0608のマイクラ配布ラボ</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="datapacks.html">データパック</a></li>
+                <li><a href="mods.html">Mod</a></li>
+                <li><a href="resourcepacks.html">リソースパック</a></li>
+                <li><a href="worlds.html">ワールド</a></li>
+                <li><a href="tools.html">ツール</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>自作ツール・データパック生成</h2>
+        
+        <div style="background-color: #1e1e1e; padding: 20px; border-radius: 6px; margin-top: 20px;">
+            <h3>データパック雛形生成ツール</h3>
+            <p style="margin-bottom: 20px; color: #aaa;">必要事項を入力すると、基本構造（pack.mcmeta, load.mcfunction, tick.mcfunction, タグ）が含まれたZipファイルを生成します。</p>
+
+            <form id="dp-generator-form">
+                <div class="form-group">
+                    <label for="dp-name">名前:</label>
+                    <input type="text" id="dp-name" required placeholder="例: MyDatapack">
+                </div>
+                <div class="form-group">
+                    <label for="dp-id">ID (半角英数字・アンダースコアのみ):</label>
+                    <input type="text" id="dp-id" required placeholder="例: my_datapack" pattern="[a-z0-9_]+">
+                </div>
+                <div class="form-group">
+                    <label for="dp-mcversion">MCバージョン:</label>
+                    <select id="dp-mcversion">
+                        <option value="1.20.4">1.20.4 (pack_format: 26)</option>
+                        <option value="1.20.1">1.20.1 (pack_format: 15)</option>
+                        <option value="1.19.4">1.19.4 (pack_format: 12)</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="dp-version">データパックバージョン:</label>
+                    <input type="text" id="dp-version" required placeholder="例: 1.0.0">
+                </div>
+                <div class="form-group">
+                    <label for="dp-description">説明:</label>
+                    <textarea id="dp-description" rows="3" placeholder="データパックの説明"></textarea>
+                </div>
+                <button type="submit" class="btn-generate">Zipファイルを生成してダウンロード</button>
+            </form>
+        </div>
+    </main>
+
+    <script src="js/generator.js"></script>
+</body>
+</html>
