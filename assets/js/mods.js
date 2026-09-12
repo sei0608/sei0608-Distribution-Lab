@@ -8,44 +8,12 @@ async function loadMods() {
   const res = await fetch("data/mods.json");
   allMods = await res.json();
 
-  setupMcVersionSelect();
-
   const id = getQueryParam("id");
   id ? showDetail(id) : showList();
 }
 
-function setupMcVersionSelect() {
-  const select = document.getElementById("mc-version-select");
-  const versions = new Set();
-
-  allMods.forEach(mod => {
-    mod.versions.forEach(v => versions.add(v.mc_version));
-  });
-
-  versions.forEach(v => {
-    const opt = document.createElement("option");
-    opt.value = v;
-    opt.textContent = v;
-    select.appendChild(opt);
-  });
-
-  select.addEventListener("change", applyFilters);
-}
-
 function applyFilters() {
-  const text = document.getElementById("search-input").value.trim().toLowerCase();
-  const mcVersion = document.getElementById("mc-version-select").value;
-
-  let filtered = allMods;
-
-  if (text !== "") filtered = filterItems(filtered, text);
-
-  if (mcVersion !== "") {
-    filtered = filtered.filter(mod =>
-      mod.versions.some(v => v.mc_version === mcVersion)
-    );
-  }
-
+  const filtered = filterItems(allMods);
   renderItemList(document.getElementById("mod-list"), filtered, "mods");
 }
 
@@ -56,11 +24,9 @@ function showList() {
 
   renderItemList(document.getElementById("mod-list"), allMods, "mods");
 
-  // ★ ここに置く
   renderTagButtons(allMods);
   setupVersionSelect(allMods);
 }
-
 
 function showDetail(id) {
   const mod = allMods.find(m => m.id === id);
@@ -89,6 +55,5 @@ document.addEventListener("DOMContentLoaded", () => {
     applyFilters();
   });
 
-  loadMods(); // mods.js の場合
+  loadMods();
 });
-
