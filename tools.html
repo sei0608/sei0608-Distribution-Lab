@@ -27,8 +27,8 @@
         <h2>自作ツール・データパック生成</h2>
         
         <div style="background-color: #1e1e1e; padding: 20px; border-radius: 6px; margin-top: 20px;">
-            <h3>データパック雛形生成ツール</h3>
-            <p style="margin-bottom: 20px; color: #aaa;">必要事項を入力すると、基本構造（pack.mcmeta, load.mcfunction, tick.mcfunction, タグ）が含まれたZipファイルを生成します。</p>
+            <h3>データパック雛形生成ツール (広範バージョン対応)</h3>
+            <p style="margin-bottom: 20px; color: #aaa;">必要事項を入力すると、複数バージョン互換（supported_formats付き）のpack.mcmetaおよび基本構造が含まれたZipファイルを生成します。</p>
 
             <form id="dp-generator-form">
                 <div class="form-group">
@@ -40,11 +40,11 @@
                     <input type="text" id="dp-id" required placeholder="例: my_datapack" pattern="[a-z0-9_]+">
                 </div>
                 <div class="form-group">
-                    <label for="dp-mcversion">MCバージョン:</label>
+                    <label for="dp-mcversion">対応対象バージョン:</label>
                     <select id="dp-mcversion">
-                        <option value="1.20.4">1.20.4 (pack_format: 26)</option>
-                        <option value="1.20.1">1.20.1 (pack_format: 15)</option>
-                        <option value="1.19.4">1.19.4 (pack_format: 12)</option>
+                        <option value="all">全バージョン対応 (1.18 〜 最新版)</option>
+                        <option value="1.20_all">1.20全般対応 (1.20.0 〜 1.20.6)</option>
+                        <option value="1.18_1.19">1.18 〜 1.19系対応</option>
                     </select>
                 </div>
                 <div class="form-group">
