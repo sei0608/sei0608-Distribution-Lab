@@ -55,7 +55,11 @@ function showList() {
   document.getElementById("detail-section").style.display = "none";
 
   renderItemList(document.getElementById("resourcepack-list"), allResourcepacks, "resourcepacks");
+
+  renderTagButtons(allResourcepacks);
+  setupVersionSelect(allResourcepacks);
 }
+
 
 function showDetail(id) {
   const rp = allResourcepacks.find(r => r.id === id);
