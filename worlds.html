@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ワールド - sei0608のマイクラ配布ラボ</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>sei0608のマイクラ配布ラボ</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="datapacks.html">データパック</a></li>
+                <li><a href="mods.html">Mod</a></li>
+                <li><a href="resourcepacks.html">リソースパック</a></li>
+                <li><a href="worlds.html">ワールド</a></li>
+                <li><a href="tools.html">ツール</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>ワールド一覧</h2>
+        <input type="text" id="search-input" class="search-box" placeholder="名前、タグで検索...">
+        
+        <div id="item-list"></div>
+        <div id="item-detail" class="detail-view" style="display: none;"></div>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script>
+        const worlds = [
+            {
+                id: "sample_world",
+                type: "world",
+                name: "アスレチックワールド",
+                author: "sei0608",
+                mcVersion: "1.20.1",
+                tags: ["アスレチック", "PVE"],
+                summary: "自作のアスレチックワールドです。",
+                description: "ステージ構成などの詳細説明です。",
+                versions: [
+                    { mcVersion: "1.20.1", version: "1.0.0" }
+                ]
+            }
+        ];
+
+        setupPage(worlds);
+    </script>
+</body>
+</html>
