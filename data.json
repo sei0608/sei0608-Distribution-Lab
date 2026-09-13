@@ -82,14 +82,10 @@
       "type": "other",
       "author": "sei0608",
       "summary": "sei0608が初めて作ったmodパック",
-      "description": "sei0608が初めて作ったmodパックです。\nショボいです。\nprismランチャーを使用しています。\nhttps://prismlauncher.org/\n使い方は↓\n起動構成を追加→インポート→参照でこのzipファイルを選択→ok\nでできます。名前やグループは自分で決めてokです。\nボスが結構追加されます。",
+      "description": "sei0608が初めて作ったmodパックです。\nショボいです。\nprismランチャーを使用しています。\nhttps://prismlauncher.org/\n使い方は↓\n起動構成を追加→インポート→参照でこのzipファイルを選択→ok\nでできます。名前やグループは自分で決めてokです。\nボスが結構追加されます。\nダウンロードはこちらから\nhttps://xgf.nu/SvX17",
       "mcVersion": "1.20.1",
       "tags": ["modpack", "boss"],
       "versions": [
-        {
-          "version": "1.0.0",
-          "mcVersion": "forge-1.20.1"
-        }
       ]
     }
   ]
