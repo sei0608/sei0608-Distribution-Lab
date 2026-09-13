@@ -18,7 +18,7 @@
       "type": "datapack",
       "name": "整地データパック",
       "author": "sei0608",
-      "mcVersion": "1.21.11",
+      "mcVersion": "1.20-1.21.11",
       "tags": ["mining", "整地"],
       "summary": "整地するようデータパック",
       "description": "アイテムは勝手に消えポイントになります。\nこのポイントでアイテムを購入できます。",
