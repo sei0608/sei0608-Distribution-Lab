@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>その他 - sei0608のマイクラ配布ラボ</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <header>
+        <h1>sei0608のマイクラ配布ラボ</h1>
+        <nav>
+            <ul>
+                <li><a href="index.html">ホーム</a></li>
+                <li><a href="datapacks.html">データパック</a></li>
+                <li><a href="mods.html">Mod</a></li>
+                <li><a href="resourcepacks.html">リソースパック</a></li>
+                <li><a href="worlds.html">ワールド</a></li>
+                <li><a href="others.html">その他</a></li>
+                <li><a href="tools.html">ツール</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <h2>その他の配布物</h2>
+        <input type="text" id="search-input" placeholder="キーワードで検索 (スペースやカンマで複数指定可)">
+        <div id="item-list" class="item-grid"></div>
+        <div id="item-detail" style="display: none;"></div>
+    </main>
+
+    <script src="js/main.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            initCategoryPage('other');
+        });
+    </script>
+</body>
+</html>
