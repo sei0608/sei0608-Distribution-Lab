@@ -23,6 +23,7 @@ async function initCategoryPage(categoryKey) {
 }
 
 // 範囲文字列（例: "1.21.8-1.21.11", "26.1-26.2", "26.1.0-26.1.2"）を展開する関数
+// 範囲文字列（例: "1.21.8-1.21.11", "26.1-26.2", "26.1.0-26.1.2"）を展開する関数
 function expandVersionRange(text) {
     const normalized = text.replace(/–/g, '-'); // ハイフンの表記揺れを統一
     const rangeMatch = normalized.match(/(\d+(?:\.\d+)*)\s*-\s*(\d+(?:\.\d+)*)/);
