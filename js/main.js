@@ -106,6 +106,12 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
         if (searchInput) searchInput.style.display = 'none';
         itemDetail.style.display = 'block';
 
+        // URLを自動判定してaタグへ変換
+        const formattedDescription = item.description.replace(
+            /(https?:\/\/[^\s]+)/g,
+            '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #4da6ff; text-decoration: underline;">$1</a>'
+        );
+
         const tagsHtml = item.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
         const loaderHtml = item.loader ? `<span class="tag">${item.loader}</span>` : '';
 
@@ -142,7 +148,7 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
             <h2>${item.name}</h2>
             <p><strong>制作者:</strong> ${item.author}</p>
             <div class="tags" style="margin: 15px 0;">${loaderHtml}${tagsHtml}</div>
-            <div style="margin: 20px 0; white-space: pre-wrap;">${item.description}</div>
+            <div style="margin: 20px 0; white-space: pre-wrap;">${formattedDescription}</div>
             
             <h3>バージョン履歴</h3>
             <ul class="version-list">
@@ -178,7 +184,7 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
                     const tagMatch = item.tags.some(t => t.toLowerCase().includes(kw));
                     const loaderMatch = item.loader ? item.loader.toLowerCase().includes(kw) : false;
                     
-                    // バージョン比較判定 (1.13〜1.21.11, 26.1〜26.2, 26.1.2 などのすべての組み合わせを数値比較)
+                    // バージョン比較判定 (範囲内の数字でヒット)
                     const mcMatch = mcVersionsTarget.some(vText => isVersionMatch(vText, kw));
 
                     return nameMatch || tagMatch || mcMatch || loaderMatch;
