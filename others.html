@@ -9,35 +9,30 @@
 <body>
     <header>
         <h1>sei0608のマイクラ配布ラボ</h1>
-        <nav>
-            <ul>
-                <li><a href="index.html">ホーム</a></li>
-                <li><a href="datapacks.html">データパック</a></li>
-                <li><a href="mods.html">Mod</a></li>
-                <li><a href="resourcepacks.html">リソースパック</a></li>
-                <li><a href="worlds.html">ワールド</a></li>
-                <li><a href="others.html">その他</a></li>
-                <li><a href="tools.html">ツール</a></li>
-            </ul>
-        </nav>
+<nav>
+    <ul>
+        <li><a href="index.html">ホーム</a></li>
+        <li><a href="datapacks.html">データパック</a></li>
+        <li><a href="mods.html">Mod</a></li>
+        <li><a href="resourcepacks.html">リソースパック</a></li>
+        <li><a href="worlds.html">ワールド</a></li>
+        <li><a href="others.html">その他</a></li>
+        <li><a href="tools.html">ツール</a></li>
+    </ul>
+</nav>
     </header>
 
-<main>
-    <h2>その他の配布物</h2>
-    
-    <div class="search-box">
-        <input type="text" id="search-input" placeholder="名前、タグ、MCバージョンで検索...">
-    </div>
-
-    <div id="item-list" class="item-grid"></div>
+    <main>
+        <h2>その他一覧</h2>
+        <input type="text" id="search-input" class="search-box" placeholder="名前、タグ、MCバージョンで検索...">
+        
+        <div id="item-list"></div>
         <div id="item-detail" class="detail-view" style="display: none;"></div>
-</main>
+    </main>
 
     <script src="js/main.js"></script>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            initCategoryPage('other');
-        });
+        initCategoryPage('other');
     </script>
 </body>
 </html>
