@@ -61,18 +61,18 @@
   "worlds": [],
   "other": [
     {
-      "id": "config_pack",
-      "name": "便利設定パック",
+      "id": "test_pack",
+      "name": "テストパック",
       "type": "other",
       "author": "sei0608",
-      "summary": "推奨設定ファイルのセットです。",
-      "description": "各種Modやツールの設定をまとめたパックです。",
+      "summary": "これはサンプルです。",
+      "description": "これはサンプルです。ダウンロードできません。",
       "mcVersion": "1.20.1-26.2",
-      "tags": ["設定ファイル", "便利"],
+      "tags": ["test", "sample"],
       "versions": [
         {
           "version": "1.0.0",
-          "mcVersion": "1.20.1-26.2"
+          "mcVersion": "26.2"
         }
       ]
     }
