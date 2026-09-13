@@ -22,32 +22,55 @@ async function initCategoryPage(categoryKey) {
     }
 }
 
-// 範囲文字列（例: "1.21.8-1.21.11", "26.1-26.2", "26.1.0-26.1.2"）を展開する関数
-// 範囲文字列（例: "1.21.8-1.21.11", "26.1-26.2", "26.1.0-26.1.2"）を展開する関数
-function expandVersionRange(text) {
-    const normalized = text.replace(/–/g, '-'); // ハイフンの表記揺れを統一
-    const rangeMatch = normalized.match(/(\d+(?:\.\d+)*)\s*-\s*(\d+(?:\.\d+)*)/);
+// バージョン文字列を比較用の数値配列に変換する (例: "1.21.11" -> [1, 21, 11])
+function parseVersion(vStr) {
+    if (!vStr) return [];
+    const match = vStr.match(/\d+(?:\.\d+)*/);
+    if (!match) return [];
+    return match[0].split('.').map(n => parseInt(n, 10));
+}
 
-    if (rangeMatch) {
-        const startParts = rangeMatch[1].split('.').map(Number);
-        const endParts = rangeMatch[2].split('.').map(Number);
+// 2つのバージョン配列を比較する ( -1: v1 < v2,  0: v1 == v2,  1: v1 > v2 )
+function compareVersions(v1, v2) {
+    const len = Math.max(v1.length, v2.length);
+    for (let i = 0; i < len; i++) {
+        const num1 = v1[i] !== undefined ? v1[i] : 0;
+        const num2 = v2[i] !== undefined ? v2[i] : 0;
+        if (num1 < num2) return -1;
+        if (num1 > num2) return 1;
+    }
+    return 0;
+}
 
-        // プレフィックス（メジャー・マイナー）が同じ場合、末尾の数値範囲を展開
-        if (startParts.length === endParts.length && startParts.length >= 2) {
-            const lastIndex = startParts.length - 1;
-            const samePrefix = startParts.slice(0, lastIndex).every((val, idx) => val === endParts[idx]);
+// 検索キーワード（kw）がデータ側のバージョン表記（vText）に該当するか判定する関数
+function isVersionMatch(vText, kw) {
+    if (!vText || !kw) return false;
 
-            if (samePrefix && startParts[lastIndex] <= endParts[lastIndex]) {
-                const prefix = startParts.slice(0, lastIndex).join('.');
-                const list = [];
-                for (let i = startParts[lastIndex]; i <= endParts[lastIndex]; i++) {
-                    list.push(`${prefix}.${i}`);
-                }
-                return list;
+    // 単純な部分一致（文字列として含まれるか）
+    if (vText.toLowerCase().includes(kw)) return true;
+
+    // ハイフン（- や –）で囲まれた範囲表記があるか確認
+    const normalized = vText.replace(/–/g, '-');
+    const parts = normalized.split('-').map(p => p.trim());
+
+    if (parts.length === 2) {
+        const startVer = parseVersion(parts[0]);
+        const endVer = parseVersion(parts[1]);
+        const targetVer = parseVersion(kw);
+
+        // 入力された検索キーワード（kw）が有効なバージョン番号（例: "26.1.2" や "1.20"）の場合
+        if (startVer.length > 0 && endVer.length > 0 && targetVer.length > 0) {
+            // targetVer が startVer 以上かつ endVer 以下か判定
+            const geStart = compareVersions(targetVer, startVer) >= 0;
+            const leEnd = compareVersions(targetVer, endVer) <= 0;
+
+            if (geStart && leEnd) {
+                return true;
             }
         }
     }
-    return [text];
+
+    return false;
 }
 
 // 共通表示・検索処理
@@ -134,7 +157,7 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
         });
     }
 
-    // 複合即時検索機能 (スペース・カンマ区切りおよびバージョン範囲展開対応)
+    // 複合即時検索機能 (範囲比較判定対応)
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             const rawQuery = e.target.value.toLowerCase().trim();
@@ -143,20 +166,21 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
                 return;
             }
 
-            // スペース（半角/全角）、カンマ(,)、読点(、)でキーワードを分割
+            // スペース（全角/半角）、カンマ、読点でキーワードを分離
             const keywords = rawQuery.split(/[\s,、]+/).filter(k => k.length > 0);
 
             const filtered = dataList.filter(item => {
-                // mcVersion およびバージョン履歴のバージョン表記から範囲を展開
+                // アイテムの全バージョン表記（mcVersion、および各履歴のmcVersion）を集約
                 const mcVersionsTarget = [item.mcVersion, ...(item.versions ? item.versions.map(v => v.mcVersion) : [])];
-                const expandedMcVersions = mcVersionsTarget.flatMap(v => v ? expandVersionRange(v) : []);
 
                 return keywords.every(kw => {
                     const nameMatch = item.name.toLowerCase().includes(kw);
                     const tagMatch = item.tags.some(t => t.toLowerCase().includes(kw));
-                    const mcMatch = expandedMcVersions.some(v => v.toLowerCase().includes(kw));
                     const loaderMatch = item.loader ? item.loader.toLowerCase().includes(kw) : false;
                     
+                    // バージョン比較判定 (1.13〜1.21.11, 26.1〜26.2, 26.1.2 などのすべての組み合わせを数値比較)
+                    const mcMatch = mcVersionsTarget.some(vText => isVersionMatch(vText, kw));
+
                     return nameMatch || tagMatch || mcMatch || loaderMatch;
                 });
             });
