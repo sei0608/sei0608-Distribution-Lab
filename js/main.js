@@ -5,7 +5,6 @@ async function initCategoryPage(categoryKey) {
     const itemDetail = document.getElementById('item-detail');
 
     try {
-        // キャッシュバスター (?v=タイムスタンプ) を追加して常に最新のdata.jsonを取得
         const cacheBuster = Date.now();
         const response = await fetch(`data.json?v=${cacheBuster}`);
         
@@ -30,7 +29,7 @@ function parseVersion(vStr) {
     return match[0].split('.').map(n => parseInt(n, 10));
 }
 
-// 2つのバージョン配列を比較する ( -1: v1 < v2,  0: v1 == v2,  1: v1 > v2 )
+// 2つのバージョン配列を比較する
 function compareVersions(v1, v2) {
     const len = Math.max(v1.length, v2.length);
     for (let i = 0; i < len; i++) {
@@ -42,7 +41,7 @@ function compareVersions(v1, v2) {
     return 0;
 }
 
-// 検索キーワード（kw）がデータ側のバージョン表記（vText）に該当するか判定する関数
+// 検索キーワード（kw）がデータ側のバージョン表記（vText）に該当するか判定
 function isVersionMatch(vText, kw) {
     if (!vText || !kw) return false;
 
@@ -71,7 +70,14 @@ function isVersionMatch(vText, kw) {
 
 // 共通表示・検索処理
 function setupPage(dataList, searchInput, itemList, itemDetail) {
+    // 検索入力欄の親要素（.search-box）を取得
+    const searchBox = searchInput ? searchInput.closest('.search-box') : null;
+
     function renderList(items) {
+        itemList.style.display = 'grid';
+        itemDetail.style.display = 'none';
+        if (searchBox) searchBox.style.display = 'block';
+
         itemList.innerHTML = '';
         if (items.length === 0) {
             itemList.innerHTML = '<p>該当する項目は見つかりませんでした。</p>';
@@ -82,19 +88,18 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
             const card = document.createElement('div');
             card.className = 'item-card';
             
-            const tagsHtml = item.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+            const tagsHtml = item.tags ? item.tags.map(tag => `<span class="tag">${tag}</span>`).join('') : '';
             const loaderHtml = item.loader ? `<span class="tag">${item.loader}</span>` : '';
-            const mcVerHtml = `<span class="tag">MC ${item.mcVersion}</span>`;
+            const mcVerHtml = item.mcVersion ? `<span class="tag">MC ${item.mcVersion}</span>` : '';
 
             card.innerHTML = `
                 <div class="item-title">${item.name}</div>
-                <div>${item.summary}</div>
+                <div>${item.summary || ''}</div>
                 <div class="tags">${mcVerHtml}${loaderHtml}${tagsHtml}</div>
             `;
 
             card.addEventListener('click', () => {
                 showDetail(item);
-                // URLの末尾に ?id=xxx を付与（ページリロードなし）
                 history.pushState(null, '', `?id=${item.id}`);
             });
             itemList.appendChild(card);
@@ -103,53 +108,56 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
 
     function showDetail(item) {
         itemList.style.display = 'none';
-        if (searchInput) searchInput.parentElement.style.display = 'none';
+        if (searchBox) searchBox.style.display = 'none';
         itemDetail.style.display = 'block';
 
-        // 現在のアイテムの直リンク用URLを生成
         const currentUrl = `${window.location.origin}${window.location.pathname}?id=${item.id}`;
 
-        // URLを自動判定してaタグへ変換
-        const formattedDescription = item.description.replace(
+        // description が空の場合の安全対策とURLリンク化
+        const descText = item.description || '';
+        const formattedDescription = descText.replace(
             /(https?:\/\/[^\s]+)/g,
             '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #4da6ff; text-decoration: underline;">$1</a>'
         );
 
-        const tagsHtml = item.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
+        const tagsHtml = item.tags ? item.tags.map(tag => `<span class="tag">${tag}</span>`).join('') : '';
         const loaderHtml = item.loader ? `<span class="tag">${item.loader}</span>` : '';
 
-        let versionsHtml = item.versions.map(v => {
-            let fileName = '';
-            let label = '';
+        let versionsHtml = '';
+        if (item.versions && Array.isArray(item.versions)) {
+            versionsHtml = item.versions.map(v => {
+                let fileName = '';
+                let label = '';
 
-            if (item.type === 'datapack') {
-                fileName = `${item.name}-${v.mcVersion}-${v.version}.zip`;
-                label = `MC ${v.mcVersion} - v${v.version}`;
-            } else if (item.type === 'mod') {
-                fileName = `${item.name}-${v.mcVersion}-${item.loader}-${v.version}.jar`;
-                label = `MC ${v.mcVersion} - ${item.loader} - v${v.version}`;
-            } else if (item.type === 'resourcepack') {
-                fileName = `${item.name}-${v.mcVersion}-${v.version}.zip`;
-                label = `MC ${v.mcVersion} - v${v.version}`;
-            } else {
-                fileName = `${item.name}-${v.version}.zip`;
-                label = `v${v.version}`;
-            }
+                if (item.type === 'datapack') {
+                    fileName = `${item.name}-${v.mcVersion}-${v.version}.zip`;
+                    label = `MC ${v.mcVersion} - v${v.version}`;
+                } else if (item.type === 'mod') {
+                    fileName = `${item.name}-${v.mcVersion}-${item.loader}-${v.version}.jar`;
+                    label = `MC ${v.mcVersion} - ${item.loader} - v${v.version}`;
+                } else if (item.type === 'resourcepack') {
+                    fileName = `${item.name}-${v.mcVersion}-${v.version}.zip`;
+                    label = `MC ${v.mcVersion} - v${v.version}`;
+                } else {
+                    fileName = `${item.name}-${v.version}.zip`;
+                    label = `v${v.version}`;
+                }
 
-            const downloadPath = `downloads/${item.type}s/${fileName}`;
+                const downloadPath = `downloads/${item.type}s/${fileName}`;
 
-            return `
-                <li class="version-item">
-                    <span>${label}</span>
-                    <a href="${downloadPath}" class="download-btn" download>ダウンロード</a>
-                </li>
-            `;
-        }).join('');
+                return `
+                    <li class="version-item">
+                        <span>${label}</span>
+                        <a href="${downloadPath}" class="download-btn" download>ダウンロード</a>
+                    </li>
+                `;
+            }).join('');
+        }
 
         itemDetail.innerHTML = `
             <div class="back-btn" id="back-btn">← 一覧に戻る</div>
             <h2>${item.name}</h2>
-            <p><strong>制作者:</strong> ${item.author}</p>
+            <p><strong>制作者:</strong> ${item.author || ''}</p>
             <div class="tags" style="margin: 15px 0;">${loaderHtml}${tagsHtml}</div>
             
             <div style="margin: 15px 0; padding: 10px; background: #121212; border-radius: 4px; font-size: 13px;">
@@ -166,11 +174,8 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
         `;
 
         document.getElementById('back-btn').addEventListener('click', () => {
-            itemDetail.style.display = 'none';
-            itemList.style.display = 'grid';
-            if (searchInput) searchInput.parentElement.style.display = 'block';
-            // 一覧に戻ったら URL から ?id= を除去
             history.pushState(null, '', window.location.pathname);
+            renderList(dataList);
         });
     }
 
@@ -189,8 +194,8 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
                 const mcVersionsTarget = [item.mcVersion, ...(item.versions ? item.versions.map(v => v.mcVersion) : [])];
 
                 return keywords.every(kw => {
-                    const nameMatch = item.name.toLowerCase().includes(kw);
-                    const tagMatch = item.tags.some(t => t.toLowerCase().includes(kw));
+                    const nameMatch = item.name ? item.name.toLowerCase().includes(kw) : false;
+                    const tagMatch = item.tags ? item.tags.some(t => t.toLowerCase().includes(kw)) : false;
                     const loaderMatch = item.loader ? item.loader.toLowerCase().includes(kw) : false;
                     const mcMatch = mcVersionsTarget.some(vText => isVersionMatch(vText, kw));
 
@@ -202,15 +207,18 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
         });
     }
 
-    // 初期表示 & ?id= パラメータの自動初期開く処理
-    renderList(dataList);
-
+    // URLパラメータの初期判定（直リンク時の表示）
     const urlParams = new URLSearchParams(window.location.search);
     const targetId = urlParams.get('id');
+
     if (targetId) {
         const foundItem = dataList.find(item => item.id === targetId);
         if (foundItem) {
             showDetail(foundItem);
+            return;
         }
     }
+
+    // 初期表示
+    renderList(dataList);
 }
