@@ -12,6 +12,7 @@ document.getElementById('dp-generator-form').addEventListener('submit', async fu
     // plural: true -> functions / false -> function
     // useRange: true -> min_format & max_format / false -> pack_format
     const versionTable = {
+        "26.3":           { minFormat: 121.0, maxFormat: 121.0, plural: false, useRange: true },
         "26.2":           { minFormat: 107, maxFormat: 107, plural: false, useRange: true },
         "26.1":           { minFormat: 101, maxFormat: 101, plural: false, useRange: true },
         "1.21.11":        { minFormat: 94,  maxFormat: 94,  plural: false, useRange: true },
