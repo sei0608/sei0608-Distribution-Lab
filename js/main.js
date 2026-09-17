@@ -113,12 +113,15 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
 
         const currentUrl = `${window.location.origin}${window.location.pathname}?id=${item.id}`;
 
-        // description が空の場合の安全対策とURLリンク化
+// 1. **太字** を <strong>太字</strong> に変換
+        // 2. URLを自動判定して <a> タグへ変換
         const descText = item.description || '';
-        const formattedDescription = descText.replace(
-            /(https?:\/\/[^\s]+)/g,
-            '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #4da6ff; text-decoration: underline;">$1</a>'
-        );
+        const formattedDescription = descText
+            .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
+            .replace(
+                /(https?:\/\/[^\s]+)/g,
+                '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #4da6ff; text-decoration: underline;">$1</a>'
+            );
 
         const tagsHtml = item.tags ? item.tags.map(tag => `<span class="tag">${tag}</span>`).join('') : '';
         const loaderHtml = item.loader ? `<span class="tag">${item.loader}</span>` : '';
