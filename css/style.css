@@ -181,3 +181,11 @@ nav a:hover {
 .btn-generate:hover {
     background-color: #0056b3;
 }
+
+/* 説明欄内の **太字** 部分の強調スタイル */
+#item-detail strong {
+    font-weight: 800;          /* より太く指定 */
+    font-size: 1.05em;         /* 通常テキストより少し大きく */
+    color: #ffffff;            /* 文字色を明るい白にして目立たせる */
+}
+
