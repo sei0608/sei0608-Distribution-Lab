@@ -3,14 +3,14 @@
     {
       "id": "sample-datapack",
       "type": "datapack",
-      "name": "",
+      "name": "データパックサンプル",
       "author": "sei0608",
-      "mcVersion": "26.1",
+      "mcVersion": "26.1-26.2",
       "tags": ["sample"],
       "summary": "いろいろなデータパックサンプルがここにまとめて配布されています。",
       "description": "いろいろなデータパックサンプルがここにまとめて配布されています。\n火の玉飛ばすデータパックサンプルです。\nニンジン棒を右クリックで飛ばせます。",
       "versions": [
-        { "mcVersion": "火の玉飛ばすデータパックサンプル-26.1", "version": "1.0.0" },
+        { "mcVersion": "火の玉飛ばす-26.1", "version": "1.0.0" },
         { "mcVersion": "ダイアログセッティング-26.2", "version": "1.0.0" }
       ]
     },
