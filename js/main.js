@@ -112,12 +112,13 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
         itemDetail.style.display = 'block';
 
         const currentUrl = `${window.location.origin}${window.location.pathname}?id=${item.id}`;
-
+        
 // 1. **太字** を <strong>太字</strong> に変換
         // 2. URLを自動判定して <a> タグへ変換
         const descText = item.description || '';
         const formattedDescription = descText
             .replace(/\*\*(.*?)\*\*/g, '<strong style="font-weight: 900; font-size: 1.5em; color: #ffffff;">$1</strong>')
+            .replace(/\*(.*?)\*/g, '<strong>$1</strong>')
             .replace(
                 /(https?:\/\/[^\s]+)/g,
                 '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #4da6ff; text-decoration: underline;">$1</a>'
