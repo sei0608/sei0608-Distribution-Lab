@@ -58,7 +58,6 @@ function isVersionMatch(vText, kw) {
         const endVer = parseVersion(parts[1]);
         const targetVer = parseVersion(kw);
 
-        // 入力された検索キーワード（kw）が有効なバージョン番号の場合
         if (startVer.length > 0 && endVer.length > 0 && targetVer.length > 0) {
             const geStart = compareVersions(targetVer, startVer) >= 0;
             const leEnd = compareVersions(targetVer, endVer) <= 0;
@@ -100,20 +99,16 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
         });
     }
 
-    function showDetail(item, updateHash = true) {
+    function showDetail(item) {
         itemList.style.display = 'none';
-        if (searchInput) searchInput.parentElement.style.display = 'none';
+        if (searchInput) searchInput.style.display = 'none';
         itemDetail.style.display = 'block';
 
-        // URLのハッシュに id を反映 (#id)
-        if (updateHash && item.id) {
-            history.pushState(null, '', `#${item.id}`);
-        }
-
-        // URLを自動判定してaタグへ変換
+        // http(s) URL、および .html? 形式の相対パス URL を自動判定してaタグへ変換
+        const urlRegex = /(https?:\/\/[^\s]+|[\w-]+\.html\?[^\s]+)/g;
         const formattedDescription = item.description.replace(
-            /(https?:\/\/[^\s]+)/g,
-            '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #4da6ff; text-decoration: underline;">$1</a>'
+            urlRegex,
+            '<a href="$1" style="color: #4da6ff; text-decoration: underline;">$1</a>'
         );
 
         const tagsHtml = item.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
@@ -162,24 +157,9 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
 
         document.getElementById('back-btn').addEventListener('click', () => {
             itemDetail.style.display = 'none';
-            itemList.style.display = 'grid';
-            if (searchInput) searchInput.parentElement.style.display = 'block';
-            // ハッシュを消去
-            history.pushState(null, '', location.pathname);
+            itemList.style.display = 'block';
+            if (searchInput) searchInput.style.display = 'block';
         });
-    }
-
-    // URLハッシュ判定（#id が指定されている場合に直接詳細を開く）
-    function checkHash() {
-        const hash = location.hash.replace('#', '');
-        if (hash) {
-            const targetItem = dataList.find(item => item.id === hash);
-            if (targetItem) {
-                showDetail(targetItem, false);
-                return true;
-            }
-        }
-        return false;
     }
 
     // 複合即時検索機能
@@ -210,17 +190,6 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
         });
     }
 
-    // ブラウザの「進む」「戻る」ボタンへの対応
-    window.addEventListener('popstate', () => {
-        if (!checkHash()) {
-            itemDetail.style.display = 'none';
-            itemList.style.display = 'grid';
-            if (searchInput) searchInput.parentElement.style.display = 'block';
-        }
-    });
-
-    // 初期表示処理 (ハッシュ指定がある場合は直接詳細画面を表示)
-    if (!checkHash()) {
-        renderList(dataList);
-    }
+    // 初期表示
+    renderList(dataList);
 }
