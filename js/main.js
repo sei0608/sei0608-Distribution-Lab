@@ -160,10 +160,7 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
             <p><strong>制作者:</strong> ${item.author || ''}</p>
             <div class="tags" style="margin: 15px 0;">${loaderHtml}${tagsHtml}</div>
             
-            <div style="margin: 15px 0; padding: 10px; background: #121212; border-radius: 4px; font-size: 13px;">
- 
-                <a href="${currentUrl}" style="color: #4da6ff; word-break: break-all;">${currentUrl}</a>
-            </div>
+
 
             <div style="margin: 20px 0; white-space: pre-wrap;">${formattedDescription}</div>
             
