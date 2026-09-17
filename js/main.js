@@ -22,7 +22,7 @@ async function initCategoryPage(categoryKey) {
     }
 }
 
-// バージョン文字列を比較用の数値配列に変換する (例: "1.21.11" -> [1, 21, 11])
+// バージョン文字列を比較用の数値配列に変換する
 function parseVersion(vStr) {
     if (!vStr) return [];
     const match = vStr.match(/\d+(?:\.\d+)*/);
@@ -46,10 +46,8 @@ function compareVersions(v1, v2) {
 function isVersionMatch(vText, kw) {
     if (!vText || !kw) return false;
 
-    // 単純な部分一致（文字列として含まれるか）
     if (vText.toLowerCase().includes(kw)) return true;
 
-    // ハイフン（- や –）で囲まれた範囲表記があるか確認
     const normalized = vText.replace(/–/g, '-');
     const parts = normalized.split('-').map(p => p.trim());
 
@@ -94,21 +92,27 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
                 <div class="tags">${mcVerHtml}${loaderHtml}${tagsHtml}</div>
             `;
 
-            card.addEventListener('click', () => showDetail(item));
+            card.addEventListener('click', () => {
+                showDetail(item);
+                // URLの末尾に ?id=xxx を付与（ページリロードなし）
+                history.pushState(null, '', `?id=${item.id}`);
+            });
             itemList.appendChild(card);
         });
     }
 
     function showDetail(item) {
         itemList.style.display = 'none';
-        if (searchInput) searchInput.style.display = 'none';
+        if (searchInput) searchInput.parentElement.style.display = 'none';
         itemDetail.style.display = 'block';
 
-        // http(s) URL、および .html? 形式の相対パス URL を自動判定してaタグへ変換
-        const urlRegex = /(https?:\/\/[^\s]+|[\w-]+\.html\?[^\s]+)/g;
+        // 現在のアイテムの直リンク用URLを生成
+        const currentUrl = `${window.location.origin}${window.location.pathname}?id=${item.id}`;
+
+        // URLを自動判定してaタグへ変換
         const formattedDescription = item.description.replace(
-            urlRegex,
-            '<a href="$1" style="color: #4da6ff; text-decoration: underline;">$1</a>'
+            /(https?:\/\/[^\s]+)/g,
+            '<a href="$1" target="_blank" rel="noopener noreferrer" style="color: #4da6ff; text-decoration: underline;">$1</a>'
         );
 
         const tagsHtml = item.tags.map(tag => `<span class="tag">${tag}</span>`).join('');
@@ -147,6 +151,12 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
             <h2>${item.name}</h2>
             <p><strong>制作者:</strong> ${item.author}</p>
             <div class="tags" style="margin: 15px 0;">${loaderHtml}${tagsHtml}</div>
+            
+            <div style="margin: 15px 0; padding: 10px; background: #121212; border-radius: 4px; font-size: 13px;">
+                <strong>直リンクURL:</strong> 
+                <a href="${currentUrl}" style="color: #4da6ff; word-break: break-all;">${currentUrl}</a>
+            </div>
+
             <div style="margin: 20px 0; white-space: pre-wrap;">${formattedDescription}</div>
             
             <h3>バージョン履歴</h3>
@@ -157,12 +167,14 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
 
         document.getElementById('back-btn').addEventListener('click', () => {
             itemDetail.style.display = 'none';
-            itemList.style.display = 'block';
-            if (searchInput) searchInput.style.display = 'block';
+            itemList.style.display = 'grid';
+            if (searchInput) searchInput.parentElement.style.display = 'block';
+            // 一覧に戻ったら URL から ?id= を除去
+            history.pushState(null, '', window.location.pathname);
         });
     }
 
-    // 複合即時検索機能
+    // 検索機能
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             const rawQuery = e.target.value.toLowerCase().trim();
@@ -190,6 +202,15 @@ function setupPage(dataList, searchInput, itemList, itemDetail) {
         });
     }
 
-    // 初期表示
+    // 初期表示 & ?id= パラメータの自動初期開く処理
     renderList(dataList);
+
+    const urlParams = new URLSearchParams(window.location.search);
+    const targetId = urlParams.get('id');
+    if (targetId) {
+        const foundItem = dataList.find(item => item.id === targetId);
+        if (foundItem) {
+            showDetail(foundItem);
+        }
+    }
 }
