@@ -34,22 +34,6 @@
   "resourcepacks": [],
   "worlds": [],
   "other": [
-    {
-      "id": "test_pack",
-      "name": "テストパック",
-      "type": "other",
-      "author": "sei0608",
-      "summary": "これはサンプルです。",
-      "description": "これはサンプルです。ダウンロードできません。",
-      "mcVersion": "1.20.1-26.2",
-      "tags": ["test", "sample"],
-      "versions": [
-        {
-          "version": "1.0.0",
-          "mcVersion": "26.2"
-        }
-      ]
-    },
         {
       "id": "sei_modpack",
       "name": "sei-modpack",
