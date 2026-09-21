@@ -29,34 +29,7 @@
     }
   ],
   "mods": [
-    {
-      "id": "sample_mod",
-      "type": "mod",
-      "name": "SampleMod",
-      "author": "sei0608",
-      "loader": "Forge",
-      "mcVersion": "1.20.1",
-      "tags": ["ユーティリティ"],
-      "summary": "サンプルModです。",
-      "description": "Modの詳細な説明欄です。",
-      "versions": [
-        { "mcVersion": "1.20.1", "version": "1.0.0" }
-      ]
-    },
-    {
-      "id": "magic_utility_mod",
-      "type": "mod",
-      "name": "MagicUtility",
-      "author": "sei0608",
-      "loader": "Fabric",
-      "mcVersion": "1.20.4",
-      "tags": ["魔法", "便利"],
-      "summary": "便利機能を追加するFabric用Modです。",
-      "description": "インベントリ整理や便利なショートカットキーを追加します。",
-      "versions": [
-        { "mcVersion": "1.20.4", "version": "2.0.0" }
-      ]
-    }
+
   ],
   "resourcepacks": [],
   "worlds": [],
